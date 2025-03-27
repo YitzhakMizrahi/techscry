@@ -1,0 +1,10 @@
+sources:
+  youtube:
+    - name: OpenAI
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCXZCJLdBC09xxGZ6gcdrc6A
+    - name: Fireship
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA
+    - name: Sonny Sangha
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCqeTj_QAnNlmt7FwzNwHZnA
+    - name: David Ondrej
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCmGSJVG3mCRXVOP4yZrU1Dw
