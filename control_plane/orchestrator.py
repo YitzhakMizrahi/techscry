@@ -8,6 +8,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from modules.youtube_fetcher import fetch_new_videos
 from modules.transcript_fetcher import fetch_transcript
 from modules.summarizer import summarize_text
+from modules.scorer import score_summary, RELEVANCE_THRESHOLD
+from agents.email_agent import send_email
 
 CONFIG_PATH = "control_plane/config.yaml"
 import yaml
@@ -42,9 +44,19 @@ def run_pipeline():
             print("⚠️ Summarization failed. Skipping.")
             continue
 
-        print("📝 Summary:")
-        print(summary)
-        print("✅ Done.\n")
+        score = score_summary(summary)
+        print(f"📈 Relevance Score: {score}")
+
+        if score >= RELEVANCE_THRESHOLD:
+            print("📝 Summary:")
+            print(summary)
+            print("✅ Passed relevance threshold.")
+
+            email_subject = f"🔥 Tech Alert: {video['title']}"
+            email_body = f"Channel: {video['channel']}\nTitle: {video['title']}\nLink: {video['url']}\n\nSummary:\n{summary}"
+            send_email(email_subject, email_body)
+        else:
+            print("🚫 Did not meet relevance threshold. Skipping notification.")
 
 
 if __name__ == "__main__":
