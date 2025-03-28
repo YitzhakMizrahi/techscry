@@ -120,3 +120,55 @@ This project follows **Modular Control Plane (MCP)** principles:
 - Event-driven
 - Agent-based delivery
 - Policy/scoring-driven filtering
+
+## 🚨 Areas We Could Improve or Expand
+
+| Category              | Observation / Opportunity                    | Suggestion                                      |
+| --------------------- | -------------------------------------------- | ----------------------------------------------- |
+| Scoring               | Right now, all summaries are treated equally | Add a keyword-based or AI scoring layer         |
+| Notification delivery | Output only goes to email                    | Add more agents (and/or Telegram/SMS for later) |
+| Scheduling            | You must run it manually                     | Add cron job or background daemon later         |
+| Transcript fallback   | No captions = skip entirely                  | Use Whisper or audio fallback later             |
+| Observability         | No logs or dashboard to trace actions        | Simple CLI logs now, maybe Streamlit view later |
+| Source diversity      | Only supports YouTube                        | Add RSS feeds or Twitter in future phases       |
+
+---
+
+## 💡 What We’re Not Doing Yet (But Could Later)
+
+📊 Dashboard or digest format (weekly summary email?)
+
+🔍 Queryable summary store (e.g. search for topics you care about)
+
+🧠 LLM-based “interest profile” (let the AI learn what you care about)
+
+🧰 Plugin framework (e.g. plug in a new source without changing control logic)
+
+---
+
+## 🔐 Bonus Features We Might Add for Deployment
+
+| Feature        | How                                      | Why                           |
+| -------------- | ---------------------------------------- | ----------------------------- |
+| `.env` manager | `dotenv`, secret manager                 | Secure and central config     |
+| Logs           | Local file, stdout, or cloud log service | Trace/debug                   |
+| Alerts         | Telegram or email on failure             | Peace of mind                 |
+| Remote config  | Pull `config.yaml` from Git or remote    | Update feeds without redeploy |
+
+---
+
+## 🧠 My Recommendation (for MVP)
+
+Start with:
+
+> 🔹 VPS (DigitalOcean/Hetzner) + `cron` + `.env` + `git` pull
+
+Then if you want to grow:
+
+- Containerize
+
+- Move to Railway or Fly.io
+
+- Add observability + multiple agents
+
+---
