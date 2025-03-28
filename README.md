@@ -8,9 +8,11 @@ TechScry is a modular, event-driven tool that listens to cutting-edge YouTube ch
 
 - ✅ Fetch new videos from a list of curated YouTube channels
 - ✅ Retrieve transcripts (if available)
-- 🔄 Summarize transcript using LLM (OpenAI API)
-- 🔄 Score the content’s relevance (via keywords or AI)
-- 🔄 Notify via email if score > threshold
+- ✅ Summarize transcript using LLM (OpenAI API)
+- ✅ Score the content’s relevance (via keywords or AI)
+- ✅ Notify via email if score > threshold
+- ✅ Queue mid-interest content for digest
+- ✅ Track skipped videos and include them in digest reports
 
 ---
 
@@ -28,15 +30,18 @@ techscry/
 │   ├── transcript_fetcher.py  # Gets captions/transcripts
 │   ├── summarizer.py          # Summarizes transcript (GPT or fallback)
 │   ├── scorer.py              # Scores relevance of content
-│   └── notifier.py            # Notifies via agent
+│   ├── skip_cache.py          # Tracks skipped (unprocessable) content
+│   └── digest_utils.py        # Queue + format digest email content
 │
 ├── agents/                    # Agents that execute side effects
 │   ├── email_agent.py         # Sends email via SMTP
-│   ├── cli_logger.py          # Prints/logs locally
-│   └── (optional) telegram.py # Future: Send message to Telegram
+│   ├── cli_logger.py          # Prints/logs locally (planned)
+│   └── telegram.py            # Future: Send message to Telegram (optional)
 │
 ├── data/                      # Local state or cache
-│   └── seen_videos.json       # Prevent duplicate notifications
+│   ├── seen_videos.json       # Successfully processed video IDs
+│   ├── skipped_videos.json    # Permanently unprocessable (e.g. no transcript)
+│   └── digest_queue.json      # Mid-score content for digest
 │
 ├── utils/                     # Common helpers
 │   └── chunking.py            # Break long text into LLM-friendly chunks
@@ -46,49 +51,64 @@ techscry/
 └── README.md
 ```
 
+---
+
 ## 📚 Modules Overview
 
-| Module               | Description                                        |
-| -------------------- | -------------------------------------------------- |
-| `youtube_fetcher`    | Parses RSS feeds and returns unseen video metadata |
-| `transcript_fetcher` | Gets transcript via `youtube-transcript-api`       |
-| `summarizer`         | (Planned) Summarizes transcript using GPT          |
-| `scorer`             | (Planned) Scores based on keywords or AI           |
-| `notifier`           | (Planned) Chooses notification method              |
+| Module               | Description                                           |
+| -------------------- | ----------------------------------------------------- |
+| `youtube_fetcher`    | Parses RSS feeds and returns unseen, unskipped videos |
+| `transcript_fetcher` | Gets transcript via `youtube-transcript-api`          |
+| `summarizer`         | Summarizes transcript using GPT                       |
+| `scorer`             | Scores summary relevance using keywords               |
+| `skip_cache`         | Tracks unprocessable videos (e.g. no transcript)      |
+| `digest_utils`       | Stores mid-interest content and formats digest email  |
+| `email_agent`        | Sends emails using SMTP credentials                   |
 
 ---
 
 ## ⚙️ Configuration
 
-See `control_plane/config.yaml` for:
+Set your `.env` like:
 
-- YouTube channels
+```env
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+TO_EMAIL=your_email@gmail.com
+```
+
+And update `control_plane/config.yaml` with your desired YouTube feeds.
 
 In `orchestrator.py`, you can control:
 
-- `MAX_VIDEOS` – limit how many videos to process per run
-- `RELEVANCE_THRESHOLD` – score cutoff for triggering notifications
+- `MAX_VIDEOS` – how many new videos to process per run
+- `RELEVANCE_THRESHOLD` – cutoff score for triggering notification
 
 ---
 
-## 🛠 Setup Instructions
+## 🛠 Current System Behavior
 
-1. Clone repo and set up venv
-2. Install requirements: `pip install -r requirements.txt`
-3. Add your `.env` file with OpenAI & SMTP creds (once ready)
-4. Run test: `python modules/youtube_fetcher.py`
+- ✅ Videos with no transcript are logged in `skipped_videos.json`
+- ✅ Processed videos are tracked in `seen_videos.json`
+- ✅ Only videos fully processed get marked as seen
+- ✅ Videos scoring between 0.5 and 0.79 are added to the digest queue
+- ✅ Digest email will include both digest-worthy videos and skipped titles (with links)
 
 ---
 
 ## 🗓️ Development Progress
 
-- ✅ Project scaffolded and virtual environment set up
-- ✅ RSS-based YouTube fetcher complete
-- ✅ Transcript fetcher working
-- ✅ Summarizer integrated with OpenAI API
-- ✅ Simple keyword-based scorer module next
-- 🔜 Notification agent (email, CLI, etc.)
-- 🔜 Digest queue and scheduling support
+- ✅ MVP architecture scaffolded
+- ✅ Modular fetch-transcribe-summarize-score pipeline
+- ✅ Relevance filtering via keyword matcher
+- ✅ Email agent operational
+- ✅ Smart seen/skipped caching logic in place
+- ✅ Digest system scaffolded
+- ✅ README updated for current structure
+- 🔜 Digest email scheduler
+- 🔜 Whisper fallback (optional)
 
 ---
 

@@ -5,11 +5,16 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from modules.youtube_fetcher import fetch_new_videos
+from modules.youtube_fetcher import (
+    fetch_new_videos,
+    save_seen_video_ids,
+    load_seen_video_ids,
+)
 from modules.transcript_fetcher import fetch_transcript
 from modules.summarizer import summarize_text
 from modules.scorer import score_summary, RELEVANCE_THRESHOLD
 from agents.email_agent import send_email
+from modules.skip_cache import add_to_skipped
 
 CONFIG_PATH = "control_plane/config.yaml"
 import yaml
@@ -23,6 +28,7 @@ def run_pipeline():
 
     youtube_sources = config.get("sources", {}).get("youtube", [])
     new_videos = fetch_new_videos(youtube_sources)[:MAX_VIDEOS]
+    seen_ids = load_seen_video_ids()
 
     if not new_videos:
         print("✅ No new videos found.")
@@ -37,6 +43,7 @@ def run_pipeline():
         transcript = fetch_transcript(video["video_id"])
         if not transcript:
             print("⚠️ Skipping due to missing transcript.")
+            add_to_skipped(video["video_id"])
             continue
 
         summary = summarize_text(transcript)
@@ -57,6 +64,11 @@ def run_pipeline():
             send_email(email_subject, email_body)
         else:
             print("🚫 Did not meet relevance threshold. Skipping notification.")
+
+        # ✅ Mark as seen only after full processing
+        seen_ids.add(video["video_id"])
+
+    save_seen_video_ids(seen_ids)
 
 
 if __name__ == "__main__":
