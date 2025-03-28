@@ -123,37 +123,77 @@ This project follows **Modular Control Plane (MCP)** principles:
 
 ## 🚨 Areas We Could Improve or Expand
 
-| Category              | Observation / Opportunity                    | Suggestion                                      |
-| --------------------- | -------------------------------------------- | ----------------------------------------------- |
-| Scoring               | Right now, all summaries are treated equally | Add a keyword-based or AI scoring layer         |
-| Notification delivery | Output only goes to email                    | Add more agents (and/or Telegram/SMS for later) |
-| Scheduling            | You must run it manually                     | Add cron job or background daemon later         |
-| Transcript fallback   | No captions = skip entirely                  | Use Whisper or audio fallback later             |
-| Observability         | No logs or dashboard to trace actions        | Simple CLI logs now, maybe Streamlit view later |
-| Source diversity      | Only supports YouTube                        | Add RSS feeds or Twitter in future phases       |
+| Category                  | Observation / Opportunity                    | Suggestion                                      |
+| ------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| **Scoring**               | Right now, all summaries are treated equally | Add a keyword-based or AI scoring layer         |
+| **Notification delivery** | Output only goes to email                    | Add more agents (and/or Telegram/SMS for later) |
+| **Scheduling**            | You must run it manually                     | Add cron job or background daemon later         |
+| **Transcript fallback**   | No captions = skip entirely                  | Use Whisper or audio fallback later             |
+| **Observability**         | No logs or dashboard to trace actions        | Simple CLI logs now, maybe Streamlit view later |
+| **Source diversity**      | Only supports YouTube                        | Add RSS feeds or Twitter in future phases       |
 
 ---
 
 ## 💡 What We’re Not Doing Yet (But Could Later)
 
-📊 Dashboard or digest format (weekly summary email?)
+- 📊 Dashboard or digest format (weekly summary email?)
 
-🔍 Queryable summary store (e.g. search for topics you care about)
+- 🔍 Queryable summary store (e.g. search for topics you care about)
 
-🧠 LLM-based “interest profile” (let the AI learn what you care about)
+- 🧠 LLM-based “interest profile” (let the AI learn what you care about)
 
-🧰 Plugin framework (e.g. plug in a new source without changing control logic)
+- 🧰 Plugin framework (e.g. plug in a new source without changing control logic)
 
 ---
 
-## 🔐 Bonus Features We Might Add for Deployment
+## ✅ Options for Deployment (Ranked by Simplicity → Flexibility)
 
-| Feature        | How                                      | Why                           |
-| -------------- | ---------------------------------------- | ----------------------------- |
-| `.env` manager | `dotenv`, secret manager                 | Secure and central config     |
-| Logs           | Local file, stdout, or cloud log service | Trace/debug                   |
-| Alerts         | Telegram or email on failure             | Peace of mind                 |
-| Remote config  | Pull `config.yaml` from Git or remote    | Update feeds without redeploy |
+### 1. Local Scheduled Runner
+
+- ⏰ Use cron (Linux/macOS) or Task Scheduler (Windows) to run the script every X minutes
+
+- ☁️ Keep API keys/secrets local
+
+- 📦 Minimal setup
+
+**Good for:** Solo use, dev phase, hobby machine
+
+---
+
+### 2. Self-hosted on VPS
+
+- Deploy to a cheap server (e.g. Hetzner, DigitalOcean, Linode)
+
+- Use `systemd`, cron, or a `supervisor` to keep the script running
+
+- Add a `.env`, git pull, and done
+
+**Good for:** Always-on pipeline, privacy control, light cost (~$5/mo)
+
+---
+
+### 3. Deploy via Serverless (Cloud Functions, AWS Lambda, etc.)
+
+- Wrap modules as callable functions
+
+- Use a scheduler (e.g., AWS EventBridge or Cloud Scheduler) to invoke periodically
+
+- Store state in cloud storage (S3, Firestore, DynamoDB)
+
+**Good for:** Pay-as-you-go, scale-to-zero, no server maintenance
+**Challenge:** Trickier for things like file-based caching (`seen_videos.json` would need to move to cloud store)
+
+---
+
+### 4. Containerized MCP on Fly.io / Railway / Render
+
+Dockerize the whole project
+
+- Use a scheduler to invoke the orchestrator (Railway cron jobs, etc.)
+
+- Add secrets via env vars
+
+**Good for:** Mid-size ops, CI integration, clean logs, scalable
 
 ---
 
@@ -170,5 +210,16 @@ Then if you want to grow:
 - Move to Railway or Fly.io
 
 - Add observability + multiple agents
+
+---
+
+## 🔐 Bonus Features We Might Add for Deployment
+
+| Feature        | How                                      | Why                           |
+| -------------- | ---------------------------------------- | ----------------------------- |
+| `.env` manager | `dotenv`, secret manager                 | Secure and central config     |
+| Logs           | Local file, stdout, or cloud log service | Trace/debug                   |
+| Alerts         | Telegram or email on failure             | Peace of mind                 |
+| Remote config  | Pull `config.yaml` from Git or remote    | Update feeds without redeploy |
 
 ---
