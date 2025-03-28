@@ -13,6 +13,7 @@ TechScry is a modular, event-driven tool that listens to cutting-edge YouTube ch
 - ✅ Notify via email if score > threshold
 - ✅ Queue mid-interest content for digest
 - ✅ Track skipped videos and include them in digest reports
+- ✅ Log summaries to enable auditability
 
 ---
 
@@ -39,9 +40,10 @@ techscry/
 │   └── telegram.py            # Future: Send message to Telegram (optional)
 │
 ├── data/                      # Local state or cache
-│   ├── seen_videos.json       # Successfully processed video IDs
-│   ├── skipped_videos.json    # Permanently unprocessable (e.g. no transcript)
-│   └── digest_queue.json      # Mid-score content for digest
+│   ├── seen_videos.json
+│   ├── skipped_videos.json
+│   ├── digest_queue.json
+│   └── summary_log.jsonl
 │
 ├── utils/                     # Common helpers
 │   └── chunking.py            # Break long text into LLM-friendly chunks
@@ -72,11 +74,15 @@ techscry/
 Set your `.env` like:
 
 ```env
+OPENAI_API_KEY=your_openai_key
 SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USERNAME=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
 TO_EMAIL=your_email@gmail.com
+MODEL_CHUNK=gpt-3.5-turbo
+MODEL_MERGE=gpt-3.5-turbo
+MAX_TOKENS_FOR_SAFE_SUMMARY=30000
 ```
 
 And update `control_plane/config.yaml` with your desired YouTube feeds.
@@ -85,6 +91,7 @@ In `orchestrator.py`, you can control:
 
 - `MAX_VIDEOS` – how many new videos to process per run
 - `RELEVANCE_THRESHOLD` – cutoff score for triggering notification
+- `DIGEST_LOWER_THRESHOLD` – minimum score to be considered for digest
 
 ---
 
@@ -93,22 +100,23 @@ In `orchestrator.py`, you can control:
 - ✅ Videos with no transcript are logged in `skipped_videos.json`
 - ✅ Processed videos are tracked in `seen_videos.json`
 - ✅ Only videos fully processed get marked as seen
-- ✅ Videos scoring between 0.5 and 0.79 are added to the digest queue
-- ✅ Digest email will include both digest-worthy videos and skipped titles (with links)
+- ✅ Videos scoring between thresholds are added to `digest_queue.json`
+- ✅ Digest emails include skipped video section
+- ✅ All summaries + scores are logged in `summary_log.jsonl`
 
 ---
 
-## 🗓️ Development Progress
+## 🔮 Future Enhancements
 
-- ✅ MVP architecture scaffolded
-- ✅ Modular fetch-transcribe-summarize-score pipeline
-- ✅ Relevance filtering via keyword matcher
-- ✅ Email agent operational
-- ✅ Smart seen/skipped caching logic in place
-- ✅ Digest system scaffolded
-- ✅ README updated for current structure
-- 🔜 Digest email scheduler
-- 🔜 Whisper fallback (optional)
+| Category          | Enhancement Ideas                                   |
+| ----------------- | --------------------------------------------------- |
+| **Scoring**       | Add LLM-based scorer alongside keywords             |
+| **Agents**        | Add Telegram, Discord, Slack, webhook agents        |
+| **Source Feeds**  | Add RSS, Twitter, newsletters, blogs                |
+| **Observability** | Logging, error tracking, dashboard (Streamlit?)     |
+| **UI**            | Dashboard to browse and filter summaries            |
+| **Profiles**      | Personalized interest modeling using embeddings     |
+| **Scheduling**    | Move from manual run to cron job or serverless loop |
 
 ---
 
@@ -116,110 +124,51 @@ In `orchestrator.py`, you can control:
 
 This project follows **Modular Control Plane (MCP)** principles:
 
-- Modular design
-- Event-driven
-- Agent-based delivery
-- Policy/scoring-driven filtering
-
-## 🚨 Areas We Could Improve or Expand
-
-| Category                  | Observation / Opportunity                    | Suggestion                                      |
-| ------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| **Scoring**               | Right now, all summaries are treated equally | Add a keyword-based or AI scoring layer         |
-| **Notification delivery** | Output only goes to email                    | Add more agents (and/or Telegram/SMS for later) |
-| **Scheduling**            | You must run it manually                     | Add cron job or background daemon later         |
-| **Transcript fallback**   | No captions = skip entirely                  | Use Whisper or audio fallback later             |
-| **Observability**         | No logs or dashboard to trace actions        | Simple CLI logs now, maybe Streamlit view later |
-| **Source diversity**      | Only supports YouTube                        | Add RSS feeds or Twitter in future phases       |
+- Modular, testable, extensible code
+- Event-driven pipelines
+- Agent-based delivery and notification
+- Scalable architecture with low friction for adding new sources and agents
 
 ---
 
-## 💡 What We’re Not Doing Yet (But Could Later)
+## 🖼️ Diagrams & System Flow (optional)
 
-- 📊 Dashboard or digest format (weekly summary email?)
+> Placeholder for a future block diagram. Examples:
+>
+> - 📦 Module flow (Fetch → Transcribe → Summarize → Score → Notify)
+> - 🛰️ Agent distribution model
+> - 🧭 Event loop or MCP orchestration overview
 
-- 🔍 Queryable summary store (e.g. search for topics you care about)
-
-- 🧠 LLM-based “interest profile” (let the AI learn what you care about)
-
-- 🧰 Plugin framework (e.g. plug in a new source without changing control logic)
-
----
-
-## ✅ Options for Deployment (Ranked by Simplicity → Flexibility)
-
-### 1. Local Scheduled Runner
-
-- ⏰ Use cron (Linux/macOS) or Task Scheduler (Windows) to run the script every X minutes
-
-- ☁️ Keep API keys/secrets local
-
-- 📦 Minimal setup
-
-**Good for:** Solo use, dev phase, hobby machine
+We can use tools like Mermaid.js, Excalidraw, or plain image embeds later.
 
 ---
 
-### 2. Self-hosted on VPS
+## ✅ Deployment Suggestions
 
-- Deploy to a cheap server (e.g. Hetzner, DigitalOcean, Linode)
+### 1. Local (for Dev or Hobby Use)
 
-- Use `systemd`, cron, or a `supervisor` to keep the script running
+- Use cron or Task Scheduler to trigger `python control_plane/orchestrator.py`
+- Secrets stay in `.env`
 
-- Add a `.env`, git pull, and done
+### 2. VPS
 
-**Good for:** Always-on pipeline, privacy control, light cost (~$5/mo)
+- Host on DigitalOcean, Hetzner, or similar
+- Use `systemd`, `cron`, or `supervisord` to run the agent
 
----
+### 3. Serverless or Fly.io/Railway
 
-### 3. Deploy via Serverless (Cloud Functions, AWS Lambda, etc.)
-
-- Wrap modules as callable functions
-
-- Use a scheduler (e.g., AWS EventBridge or Cloud Scheduler) to invoke periodically
-
-- Store state in cloud storage (S3, Firestore, DynamoDB)
-
-**Good for:** Pay-as-you-go, scale-to-zero, no server maintenance
-**Challenge:** Trickier for things like file-based caching (`seen_videos.json` would need to move to cloud store)
+- Move state files to S3 or Firestore
+- Use serverless scheduler or cron job worker
 
 ---
 
-### 4. Containerized MCP on Fly.io / Railway / Render
+## 🧠 Ready to Scale
 
-Dockerize the whole project
+The system is designed to easily:
 
-- Use a scheduler to invoke the orchestrator (Railway cron jobs, etc.)
+- Add more sources (e.g., `rss_fetcher.py`, `x_fetcher.py`)
+- Add new agents (`telegram_agent.py`, `discord_agent.py`, etc.)
+- Switch scoring models
+- Track history for transparency and tuning
 
-- Add secrets via env vars
-
-**Good for:** Mid-size ops, CI integration, clean logs, scalable
-
----
-
-## 🧠 My Recommendation (for MVP)
-
-Start with:
-
-> 🔹 VPS (DigitalOcean/Hetzner) + `cron` + `.env` + `git` pull
-
-Then if you want to grow:
-
-- Containerize
-
-- Move to Railway or Fly.io
-
-- Add observability + multiple agents
-
----
-
-## 🔐 Bonus Features We Might Add for Deployment
-
-| Feature        | How                                      | Why                           |
-| -------------- | ---------------------------------------- | ----------------------------- |
-| `.env` manager | `dotenv`, secret manager                 | Secure and central config     |
-| Logs           | Local file, stdout, or cloud log service | Trace/debug                   |
-| Alerts         | Telegram or email on failure             | Peace of mind                 |
-| Remote config  | Pull `config.yaml` from Git or remote    | Update feeds without redeploy |
-
----
+> Have fun filtering the noise and amplifying what matters. TechScry is just getting started 🚀
