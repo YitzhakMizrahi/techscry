@@ -43,7 +43,12 @@ def run_pipeline():
         transcript = fetch_transcript(video["video_id"])
         if not transcript:
             print("⚠️ Skipping due to missing transcript.")
-            add_to_skipped(video["video_id"])
+            add_to_skipped(
+                video_id=video["video_id"],
+                title=video["title"],
+                url=video["url"],
+                channel=video["channel"],
+            )
             continue
 
         summary = summarize_text(transcript)
