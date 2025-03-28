@@ -63,7 +63,11 @@ techscry/
 See `control_plane/config.yaml` for:
 
 - YouTube channels
-- Scoring thresholds (TBD)
+
+In `orchestrator.py`, you can control:
+
+- `MAX_VIDEOS` – limit how many videos to process per run
+- `RELEVANCE_THRESHOLD` – score cutoff for triggering notifications
 
 ---
 
@@ -81,8 +85,10 @@ See `control_plane/config.yaml` for:
 - ✅ Project scaffolded and virtual environment set up
 - ✅ RSS-based YouTube fetcher complete
 - ✅ Transcript fetcher working
-- ⏳ Summarizer module next
-- 🔜 Scorer, notifier, and control loop
+- ✅ Summarizer integrated with OpenAI API
+- ✅ Simple keyword-based scorer module next
+- 🔜 Notification agent (email, CLI, etc.)
+- 🔜 Digest queue and scheduling support
 
 ---
 
