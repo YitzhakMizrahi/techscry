@@ -1,0 +1,39 @@
+{
+  "keywords": [
+    "ai agent",
+    "openai",
+    "gpt",
+    "claude",
+    "llm",
+    "next.js",
+    "react",
+    "clerk",
+    "vercel",
+    "postgres",
+    "stripe",
+    "saas",
+    "embedding",
+    "autogen",
+    "langchain",
+    "rag",
+    "sora",
+    "prompt engineering",
+    "agentsdk",
+    "autonomous agent",
+    "tech stack",
+    "semantic kernel",
+    "inference",
+    "fine-tuning",
+    "developer tools",
+    "supabase",
+    "python",
+    "javascript",
+    "typescript"
+  ],
+  "topics": [
+    "LLM-powered developer tools",
+    "Frontend innovation",
+    "Self-hosted infra for AI projects"
+  ],
+  "avoid": ["crypto", "gaming", "hardware reviews"]
+}

@@ -1,175 +1,178 @@
-# 🧠 TechScry – AI-Powered Tech Signal Filter
+# 🧠 TechScry
 
-TechScry is a modular, event-driven tool that listens to cutting-edge YouTube channels, summarizes new content, scores it for relevance, and notifies you only when it's noteworthy.
-
----
-
-## 🚀 MVP Goal (Phase 1)
-
-- ✅ Fetch new videos from a list of curated YouTube channels
-- ✅ Retrieve transcripts (if available)
-- ✅ Summarize transcript using LLM (OpenAI API)
-- ✅ Score the content’s relevance (via keywords or AI)
-- ✅ Notify via email if score > threshold
-- ✅ Queue mid-interest content for digest
-- ✅ Track skipped videos and include them in digest reports
-- ✅ Store summary logs for later insights/debugging
+TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scores them for relevance using LLMs, and delivers personalized daily digests and alerts to each user.
 
 ---
 
-## 📁 Project Structure (MCP-style)
+## 🚀 Features
+
+- 🔎 **Video Discovery**: Scrapes RSS feeds of relevant YouTube channels
+- 📝 **Transcription & Summarization**: Pulls transcripts and summarizes with OpenAI
+- 📊 **Smart Scoring**: Uses GPT-3.5/4 to determine if a video is relevant to each user
+- 📬 **Digest System**: Queues relevant summaries into user-specific digests
+- 📧 **Email Notifications**: Sends digest or instant alerts to each user
+- 👥 **Multi-User Support**: Each user has isolated preferences and digest queues
+
+---
+
+## 🏗️ Project Structure
 
 ```bash
 techscry/
-├── control_plane/       # Orchestration logic
+├── agents/              # Email agent (SMTP integration)
+├── control_plane/       # Orchestration logic and run_pipeline()
 │   ├── orchestrator.py
-│   ├── config.yaml
-│   └── cli.py
-├── modules/             # Modular functional units
+│   ├── config.yaml      # [Legacy] Static channel list (overridden at runtime)
+├── modules/             # Core modules for fetch/summarize/score
 │   ├── youtube_fetcher.py
 │   ├── transcript_fetcher.py
 │   ├── summarizer.py
-│   ├── scorer.py
-│   ├── skip_cache.py
-│   └── digest_utils.py
-├── agents/              # Delivery agents (email, CLI, etc.)
-│   ├── email_agent.py
-│   └── cli_logger.py (planned)
-├── data/                # Local cache and state
-│   ├── seen_videos.json
-│   ├── skipped_videos.json
-│   ├── digest_queue.json
-│   └── summary_log.jsonl
-├── utils/               # Helpers like chunking, formatting
-│   └── chunking.py
-├── scripts/             # Standalone helpers
-│   └── skipped_report.py
-├── .env                 # API keys and config
-├── requirements.txt
-└── README.md
+│   ├── smart_scorer.py
+│   ├── user_digest.py
+│   ├── user_profile.py
+│   ├── channel_pool.py  # 🆕 Collects preferred channels from all users
+├── templates/           # Digest HTML templates (email-safe and browser preview)
+├── users/               # Per-user data and preferences
+│   ├── user123/
+│       ├── profile.json
+│       ├── seen.json
+│       ├── digest_queue.json
+│       ├── skipped.json
+├── run_pipeline.py      # Main pipeline (single user or global run)
+├── run_for_all_users.py # 🔁 Runs pipeline for all users in users/
+├── send_digest.py       # Sends digest (with preview and mock flags)
 ```
 
 ---
 
-## 📚 Modules Overview
+## 🔧 Setup
 
-| Module               | Description                                           |
-| -------------------- | ----------------------------------------------------- |
-| `youtube_fetcher`    | Parses RSS feeds and returns unseen, unskipped videos |
-| `transcript_fetcher` | Gets transcript via `youtube-transcript-api`          |
-| `summarizer`         | Summarizes transcript using GPT                       |
-| `scorer`             | Scores summary relevance using keywords               |
-| `skip_cache`         | Tracks unprocessable videos (e.g. no transcript)      |
-| `digest_utils`       | Stores mid-interest content and formats digest email  |
-| `email_agent`        | Sends emails using SMTP credentials                   |
+1. **Clone the repo**
 
----
+```bash
+git clone https://github.com/yourname/techscry.git
+cd techscry
+```
 
-## ⚙️ Configuration
+2. **Install dependencies**
 
-Set your `.env` like:
+```bash
+pip install -r requirements.txt
+```
+
+3. **Configure environment**
+
+Create a `.env` file:
 
 ```env
+OPENAI_API_KEY=sk-xxx
 SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USERNAME=your_email@gmail.com
+SMTP_USERNAME=your@email.com
 SMTP_PASSWORD=your_app_password
-TO_EMAIL=your_email@gmail.com
-OPENAI_API_KEY=your_openai_key
-MODEL_CHUNK=gpt-3.5-turbo
-MODEL_MERGE=gpt-3.5-turbo
-MAX_TOKENS_FOR_SAFE_SUMMARY=30000
 ```
 
-Update `control_plane/config.yaml` with your desired YouTube feeds.
+4. **Add a user profile**
+
+Create a directory in `users/` with a `profile.json` like this:
+
+```json
+{
+  "email": "your@email.com",
+  "interests": {
+    "keywords": ["openai", "gpt", "next.js"],
+    "preferred_channels": ["OpenAI", "Fireship"]
+  },
+  "notification_threshold": 0.6,
+  "digest_threshold": 0.3
+}
+```
 
 ---
 
-## Example commands:
+## 🧪 Run the Pipeline
 
-```python
-# Preview mock digest in browser
+### 🧵 For All Users
+
+```bash
+python run_for_all_users.py
+```
+
+### 🧪 For Single User (or dev/testing)
+
+```bash
+python run_pipeline.py
+```
+
+---
+
+## 📬 Digest & Email
+
+### Preview Email (mock data or real data)
+
+```bash
 python send_digest.py --mock --preview
-
-# Send mock digest via email (doesn't clear queue)
-python send_digest.py --mock
-
-# Preview mock content with email-safe
-python send_digest.py --mock --email-safe --preview 
-
-# Preview real digest before sending
 python send_digest.py --preview
-
-# Send real digest and clear the queue
-python send_digest.py
-
-# Applies email-friendly rendering adjustments for better client support
-python send_digest.py --email-safe
-
 ```
 
-## 🛠 Current System Behavior
+### Send Digest Email
 
-- ✅ Videos with no transcript are logged in `skipped_videos.json`
-- ✅ Processed videos are tracked in `seen_videos.json`
-- ✅ Only videos fully processed get marked as seen
-- ✅ Videos scoring between 0.3 and 0.49 are added to the digest queue
-- ✅ Digest email includes digest-worthy videos and skipped titles (with links)
-- ✅ Summaries and scores are stored in `summary_log.jsonl`
+```bash
+python send_digest.py
+```
 
----
+### Email-safe version
 
-## 🔧 CLI Utilities
-
-| Script              | Function                                         |
-| ------------------- | ------------------------------------------------ |
-| `orchestrator.py`   | Runs the full fetch → summarize → score pipeline |
-| `send_digest.py`    | Sends out the digest email                       |
-| `skipped_report.py` | Shows skipped videos from cache                  |
-| `cli.py` (future)   | Unified CLI for all above                        |
+```bash
+python send_digest.py --email-safe
+```
 
 ---
 
-## 🧠 Vision
+## ⚙️ Flags Summary
 
-This project follows **Modular Control Plane (MCP)** principles:
+| Flag           | Description                                            |
+| -------------- | ------------------------------------------------------ |
+| `--mock`       | Use mock data from `mock/` for testing email digest    |
+| `--preview`    | Open HTML preview in browser (write to `preview.html`) |
+| `--email-safe` | Use email-compatible template (inlined styles)         |
 
-- Modular design
-- Event-driven
-- Agent-based delivery
-- Policy/scoring-driven filtering
-
-With long-term goals to:
-
-- Support multi-agent delivery (Telegram, browser, etc.)
-- Expand beyond YouTube (RSS, podcasts, newsletters)
-- Enable custom profiles + web UI for personalized digests
+Flags can be combined (e.g. `--mock --preview`, `--email-safe --preview`).
 
 ---
 
-## 🚨 Ideas + Backlog
+## 💡 Architecture Notes
 
-| Area             | Idea                                                    |
-| ---------------- | ------------------------------------------------------- |
-| Email Design     | Upgrade digest formatting to rich HTML                  |
-| Scheduling       | Add cron-based or persistent orchestrator               |
-| Fallback         | Whisper/audio fallback for transcript-less videos       |
-| AI Scoring       | Add relevance scoring via GPT + user interest vectors   |
-| Source Expansion | Add support for RSS feeds, blogs, Twitter               |
-| Profile Support  | Prepare config system for multi-user personalization    |
-| Observability    | Debug logs, run history, optional dashboard (Streamlit) |
+### Channel Source Strategy
+
+- Channels are **dynamically aggregated** from all user profiles.
+- `channel_pool.py` reads all `users/<id>/profile.json` and builds the global pool.
+
+### Relevance Logic
+
+| Type            | Logic                           | Action                      |
+| --------------- | ------------------------------- | --------------------------- |
+| 🔔 Direct Match | Channel in `preferred_channels` | Instant alert, skip scoring |
+| 🧠 Smart Match  | LLM score matches `keywords`    | Score → Digest or Alert     |
+| 🙅 Irrelevant   | Low match                       | Skip                        |
+
+### Storage
+
+- Each user has:
+  - `seen.json`: Tracks watched videos
+  - `digest_queue.json`: Pending digest items
+  - `skipped.json`: Skipped videos (e.g. no transcript)
 
 ---
 
-## 🚀 Deployment Paths
+## 📦 To Do (Backlog)
 
-| Method         | Pros                           | Setup Level |
-| -------------- | ------------------------------ | ----------- |
-| Local Runner   | Simple, private                | 🟢 Easy     |
-| VPS Cron Job   | Persistent, flexible           | 🟡 Medium   |
-| Railway/Fly.io | Scalable, auto-deploys         | 🟠 Medium+  |
-| Serverless     | Cost-effective, trickier state | 🔴 Advanced |
+- Responsive digest styling
+- Webhook/API for onboarding users
+- User settings UI
+- Retry queue for failed summarizations
+- Embed video thumbnails in email
 
 ---
 
-You're building a personal intelligence system. Keep shipping. ✨
+Built with ❤️ by TechScry Labs

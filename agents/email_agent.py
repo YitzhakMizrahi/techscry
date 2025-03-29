@@ -15,10 +15,10 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 TO_EMAIL = os.getenv("TO_EMAIL")
 
 
-def send_email(subject: str, html_body: str):
+def send_email(subject: str, html_body: str, to: None):
     msg = MIMEMultipart("alternative")
     msg["From"] = SMTP_USERNAME
-    msg["To"] = TO_EMAIL
+    msg["To"] = to
     msg["Subject"] = subject
 
     # This is the key part that makes it render as HTML
@@ -29,7 +29,7 @@ def send_email(subject: str, html_body: str):
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USERNAME, SMTP_PASSWORD)
-            server.send_message(msg)
+            server.sendmail(SMTP_USERNAME, to, msg.as_string())
         print(f"📧 Email sent: {subject}")
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
