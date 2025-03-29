@@ -13,7 +13,7 @@ TechScry is a modular, event-driven tool that listens to cutting-edge YouTube ch
 - ✅ Notify via email if score > threshold
 - ✅ Queue mid-interest content for digest
 - ✅ Track skipped videos and include them in digest reports
-- ✅ Log summaries to enable auditability
+- ✅ Store summary logs for later insights/debugging
 
 ---
 
@@ -21,34 +21,30 @@ TechScry is a modular, event-driven tool that listens to cutting-edge YouTube ch
 
 ```bash
 techscry/
-├── control_plane/             # Orchestrator logic
-│   ├── main.py                # Entry point
-│   ├── orchestrator.py        # Core logic
-│   └── config.yaml            # Source list, rules, thresholds
-│
-├── modules/                   # Modular logic units
-│   ├── youtube_fetcher.py     # Polls channels (RSS/API)
-│   ├── transcript_fetcher.py  # Gets captions/transcripts
-│   ├── summarizer.py          # Summarizes transcript (GPT or fallback)
-│   ├── scorer.py              # Scores relevance of content
-│   ├── skip_cache.py          # Tracks skipped (unprocessable) content
-│   └── digest_utils.py        # Queue + format digest email content
-│
-├── agents/                    # Agents that execute side effects
-│   ├── email_agent.py         # Sends email via SMTP
-│   ├── cli_logger.py          # Prints/logs locally (planned)
-│   └── telegram.py            # Future: Send message to Telegram (optional)
-│
-├── data/                      # Local state or cache
+├── control_plane/       # Orchestration logic
+│   ├── orchestrator.py
+│   ├── config.yaml
+│   └── cli.py
+├── modules/             # Modular functional units
+│   ├── youtube_fetcher.py
+│   ├── transcript_fetcher.py
+│   ├── summarizer.py
+│   ├── scorer.py
+│   ├── skip_cache.py
+│   └── digest_utils.py
+├── agents/              # Delivery agents (email, CLI, etc.)
+│   ├── email_agent.py
+│   └── cli_logger.py (planned)
+├── data/                # Local cache and state
 │   ├── seen_videos.json
 │   ├── skipped_videos.json
 │   ├── digest_queue.json
 │   └── summary_log.jsonl
-│
-├── utils/                     # Common helpers
-│   └── chunking.py            # Break long text into LLM-friendly chunks
-│
-├── .env                       # Your keys/config (e.g., OpenAI, SMTP)
+├── utils/               # Helpers like chunking, formatting
+│   └── chunking.py
+├── scripts/             # Standalone helpers
+│   └── skipped_report.py
+├── .env                 # API keys and config
 ├── requirements.txt
 └── README.md
 ```
@@ -74,24 +70,18 @@ techscry/
 Set your `.env` like:
 
 ```env
-OPENAI_API_KEY=your_openai_key
 SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USERNAME=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
 TO_EMAIL=your_email@gmail.com
+OPENAI_API_KEY=your_openai_key
 MODEL_CHUNK=gpt-3.5-turbo
 MODEL_MERGE=gpt-3.5-turbo
 MAX_TOKENS_FOR_SAFE_SUMMARY=30000
 ```
 
-And update `control_plane/config.yaml` with your desired YouTube feeds.
-
-In `orchestrator.py`, you can control:
-
-- `MAX_VIDEOS` – how many new videos to process per run
-- `RELEVANCE_THRESHOLD` – cutoff score for triggering notification
-- `DIGEST_LOWER_THRESHOLD` – minimum score to be considered for digest
+Update `control_plane/config.yaml` with your desired YouTube feeds.
 
 ---
 
@@ -100,75 +90,63 @@ In `orchestrator.py`, you can control:
 - ✅ Videos with no transcript are logged in `skipped_videos.json`
 - ✅ Processed videos are tracked in `seen_videos.json`
 - ✅ Only videos fully processed get marked as seen
-- ✅ Videos scoring between thresholds are added to `digest_queue.json`
-- ✅ Digest emails include skipped video section
-- ✅ All summaries + scores are logged in `summary_log.jsonl`
+- ✅ Videos scoring between 0.3 and 0.49 are added to the digest queue
+- ✅ Digest email includes digest-worthy videos and skipped titles (with links)
+- ✅ Summaries and scores are stored in `summary_log.jsonl`
 
 ---
 
-## 🔮 Future Enhancements
+## 🔧 CLI Utilities
 
-| Category          | Enhancement Ideas                                   |
-| ----------------- | --------------------------------------------------- |
-| **Scoring**       | Add LLM-based scorer alongside keywords             |
-| **Agents**        | Add Telegram, Discord, Slack, webhook agents        |
-| **Source Feeds**  | Add RSS, Twitter, newsletters, blogs                |
-| **Observability** | Logging, error tracking, dashboard (Streamlit?)     |
-| **UI**            | Dashboard to browse and filter summaries            |
-| **Profiles**      | Personalized interest modeling using embeddings     |
-| **Scheduling**    | Move from manual run to cron job or serverless loop |
+| Script              | Function                                         |
+| ------------------- | ------------------------------------------------ |
+| `orchestrator.py`   | Runs the full fetch → summarize → score pipeline |
+| `send_digest.py`    | Sends out the digest email                       |
+| `skipped_report.py` | Shows skipped videos from cache                  |
+| `cli.py` (future)   | Unified CLI for all above                        |
 
 ---
 
-## 🧩 Vision
+## 🧠 Vision
 
 This project follows **Modular Control Plane (MCP)** principles:
 
-- Modular, testable, extensible code
-- Event-driven pipelines
-- Agent-based delivery and notification
-- Scalable architecture with low friction for adding new sources and agents
+- Modular design
+- Event-driven
+- Agent-based delivery
+- Policy/scoring-driven filtering
+
+With long-term goals to:
+
+- Support multi-agent delivery (Telegram, browser, etc.)
+- Expand beyond YouTube (RSS, podcasts, newsletters)
+- Enable custom profiles + web UI for personalized digests
 
 ---
 
-## 🖼️ Diagrams & System Flow (optional)
+## 🚨 Ideas + Backlog
 
-> Placeholder for a future block diagram. Examples:
->
-> - 📦 Module flow (Fetch → Transcribe → Summarize → Score → Notify)
-> - 🛰️ Agent distribution model
-> - 🧭 Event loop or MCP orchestration overview
-
-We can use tools like Mermaid.js, Excalidraw, or plain image embeds later.
-
----
-
-## ✅ Deployment Suggestions
-
-### 1. Local (for Dev or Hobby Use)
-
-- Use cron or Task Scheduler to trigger `python control_plane/orchestrator.py`
-- Secrets stay in `.env`
-
-### 2. VPS
-
-- Host on DigitalOcean, Hetzner, or similar
-- Use `systemd`, `cron`, or `supervisord` to run the agent
-
-### 3. Serverless or Fly.io/Railway
-
-- Move state files to S3 or Firestore
-- Use serverless scheduler or cron job worker
+| Area             | Idea                                                    |
+| ---------------- | ------------------------------------------------------- |
+| Email Design     | Upgrade digest formatting to rich HTML                  |
+| Scheduling       | Add cron-based or persistent orchestrator               |
+| Fallback         | Whisper/audio fallback for transcript-less videos       |
+| AI Scoring       | Add relevance scoring via GPT + user interest vectors   |
+| Source Expansion | Add support for RSS feeds, blogs, Twitter               |
+| Profile Support  | Prepare config system for multi-user personalization    |
+| Observability    | Debug logs, run history, optional dashboard (Streamlit) |
 
 ---
 
-## 🧠 Ready to Scale
+## 🚀 Deployment Paths
 
-The system is designed to easily:
+| Method         | Pros                           | Setup Level |
+| -------------- | ------------------------------ | ----------- |
+| Local Runner   | Simple, private                | 🟢 Easy     |
+| VPS Cron Job   | Persistent, flexible           | 🟡 Medium   |
+| Railway/Fly.io | Scalable, auto-deploys         | 🟠 Medium+  |
+| Serverless     | Cost-effective, trickier state | 🔴 Advanced |
 
-- Add more sources (e.g., `rss_fetcher.py`, `x_fetcher.py`)
-- Add new agents (`telegram_agent.py`, `discord_agent.py`, etc.)
-- Switch scoring models
-- Track history for transparency and tuning
+---
 
-> Have fun filtering the noise and amplifying what matters. TechScry is just getting started 🚀
+You're building a personal intelligence system. Keep shipping. ✨
