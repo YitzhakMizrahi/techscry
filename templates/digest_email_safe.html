@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechScry Digest</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #333333;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: auto;
+      }
+
+      h1 {
+        font-size: 24px;
+        border-bottom: 2px solid #58a6ff;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background-color: #f8f8f8;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+      }
+
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .channel {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+      }
+
+      .link {
+        font-size: 14px;
+        color: #1a73e8;
+        text-decoration: none;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+
+      .summary {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .info-card {
+        background-color: #eaf4ff;
+        border-left: 4px solid #58a6ff;
+        padding: 16px;
+        border-radius: 6px;
+      }
+
+      .skipped-list {
+        padding-left: 1.25rem;
+        list-style-type: disc;
+      }
+
+      .skipped-list li {
+        margin-bottom: 10px;
+      }
+
+      .skipped-list a {
+        color: #1a73e8;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🧠 TechScry Daily Digest</h1>
+
+      {% if digest_items %}
+      <div class="section">
+        <h2>📺 New Videos</h2>
+        {% for item in digest_items %}
+        <div class="card">
+          <div class="title">{{ item.title }}</div>
+          <div class="channel">{{ item.channel }}</div>
+          <a class="link" href="{{ item.url }}">🔗 Watch Video</a>
+          <div class="summary">{{ item.summary }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="section">
+        <div class="info-card">
+          <h2>📭 No new high-relevance videos today</h2>
+          <p class="summary">
+            We scanned your feeds, but nothing stood out enough to make the digest.
+            Check back tomorrow for new insights!
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if skipped_videos %}
+      <div class="section">
+        <h2>🚫 Skipped Videos (No Transcript)</h2>
+        <ul class="skipped-list">
+          {% for vid in skipped_videos %}
+          <li>
+            <strong>{{ vid.title }}</strong> —
+            <a href="{{ vid.url }}">{{ vid.url }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

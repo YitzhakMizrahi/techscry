@@ -2,7 +2,7 @@
 
 import re
 
-RELEVANCE_THRESHOLD = 0.5
+RELEVANCE_THRESHOLD = 0.3
 
 KEYWORDS = [
     "ai agent",

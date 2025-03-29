@@ -85,6 +85,29 @@ Update `control_plane/config.yaml` with your desired YouTube feeds.
 
 ---
 
+## Example commands:
+
+```python
+# Preview mock digest in browser
+python send_digest.py --mock --preview
+
+# Send mock digest via email (doesn't clear queue)
+python send_digest.py --mock
+
+# Preview mock content with email-safe
+python send_digest.py --mock --email-safe --preview 
+
+# Preview real digest before sending
+python send_digest.py --preview
+
+# Send real digest and clear the queue
+python send_digest.py
+
+# Applies email-friendly rendering adjustments for better client support
+python send_digest.py --email-safe
+
+```
+
 ## 🛠 Current System Behavior
 
 - ✅ Videos with no transcript are logged in `skipped_videos.json`

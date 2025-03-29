@@ -1,2 +1,5 @@
 .venv/
 .env
+preview_safe.html
+preview.html
+data/

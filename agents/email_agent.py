@@ -15,13 +15,15 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 TO_EMAIL = os.getenv("TO_EMAIL")
 
 
-def send_email(subject: str, body: str):
-    msg = MIMEMultipart()
+def send_email(subject: str, html_body: str):
+    msg = MIMEMultipart("alternative")
     msg["From"] = SMTP_USERNAME
     msg["To"] = TO_EMAIL
     msg["Subject"] = subject
 
-    msg.attach(MIMEText(body, "plain"))
+    # This is the key part that makes it render as HTML
+    part = MIMEText(html_body, "html")
+    msg.attach(part)
 
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --bg-light: #fdfdfd;
+        --bg-dark: #0d1117;
+        --text-light: #0d1117;
+        --text-dark: #c9d1d9;
+        --accent: #58a6ff;
+        --card-light: #ffffff;
+        --card-dark: #161b22;
+        --muted: #8b949e;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: var(--bg-dark);
+          color: var(--text-dark);
+        }
+        .card {
+          background-color: var(--card-dark);
+        }
+        a {
+          color: var(--accent);
+        }
+      }
+
+      @media (prefers-color-scheme: light) {
+        body {
+          background-color: var(--bg-light);
+          color: var(--text-light);
+        }
+        .card {
+          background-color: var(--card-light);
+        }
+        a {
+          color: var(--accent);
+        }
+      }
+
+      body {
+        font-family: Consolas, Monaco, 'Courier New', monospace;
+        padding: 2rem;
+        max-width: 800px;
+        margin: auto;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 0.5rem;
+      }
+
+      .section {
+        margin-bottom: 2.5rem;
+      }
+
+      .card {
+        border-radius: 0.6rem;
+        padding: 1.2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .title {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      .channel {
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+
+      .link {
+        font-size: 0.9rem;
+        display: block;
+        margin: 0.3rem 0 0.8rem;
+        text-decoration: none;
+      }
+
+      .summary {
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      ul {
+        padding-left: 1.2rem;
+      }
+
+      li {
+        margin-bottom: 0.6rem;
+      }
+
+      .info-card {
+        border-left: 4px solid var(--accent);
+        background: var(--card-light);
+        color: var(--text-light);
+        padding: 1rem;
+        border-radius: 0.5rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .info-card {
+          background: var(--card-dark);
+          color: var(--text-dark);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧠 TechScry Daily Digest</h1>
+
+    {% if digest_items %}
+    <div class="section">
+      <h2>📺 New Videos</h2>
+      {% for item in digest_items %}
+      <div class="card">
+        <div class="title">{{ item.title }}</div>
+        <div class="channel">{{ item.channel }}</div>
+        <a class="link" href="{{ item.url }}">🔗 Watch Video</a>
+        <div class="summary">{{ item.summary }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="section">
+      <div class="info-card">
+        <h2>📭 No new high-relevance videos today</h2>
+        <p class="summary">
+          We scanned your feeds, but nothing stood out enough to make the
+          digest. Check back tomorrow for new insights!
+        </p>
+      </div>
+    </div>
+    {% endif %} {% if skipped_videos %}
+    <div class="section">
+      <h2>🚫 Skipped Videos (No Transcript)</h2>
+      <ul>
+        {% for vid in skipped_videos %}
+        <li>
+          <strong>{{ vid.title }}</strong> —
+          <a href="{{ vid.url }}">{{ vid.url }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </body>
+</html>
