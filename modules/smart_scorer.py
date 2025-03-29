@@ -11,7 +11,7 @@ def smart_score(summary: str, user_id: str) -> float:
     return smart_score_summary(summary, profile)
 
 
-def smart_score_summary(summary: str, profile: dict) -> float:
+def smart_score_summary(summary: str, profile: dict, verbose=False) -> float:
     keywords = profile.get("interests", {}).get("keywords", [])
     channels = profile.get("interests", {}).get("preferred_channels", [])
 
@@ -27,6 +27,11 @@ def smart_score_summary(summary: str, profile: dict) -> float:
         f"Summary:\n{summary}\n"
         "Respond only with the score as a decimal number."
     )
+
+    if verbose:
+        print("🧠 [Smart Scorer Prompt] ------------------")
+        print(prompt)
+        print("------------------------------------------")
 
     try:
         response = client.chat.completions.create(

@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Build a GPT-powered SaaS in 10 minutes",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=xyz123",
+    "summary": "This video walks through building a full-stack SaaS app using GPT-4, LangChain, and Vercel AI SDK..."
+  },
+  {
+    "title": "Why React Server Components are controversial",
+    "channel": "OpenAI Devs",
+    "url": "https://www.youtube.com/watch?v=abc456",
+    "summary": "A breakdown of why RSCs are creating tension in the React community, and how it affects SSR and DX..."
+  }
+]

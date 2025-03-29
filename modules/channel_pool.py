@@ -4,7 +4,7 @@ import json
 USERS_DIR = "users"
 
 
-def get_all_preferred_channels():
+def get_all_followed_channels():
     channels = set()
 
     for uid in os.listdir(USERS_DIR):
@@ -21,7 +21,7 @@ def get_all_preferred_channels():
 
 
 if __name__ == "__main__":
-    all_channels = get_all_preferred_channels()
+    all_channels = get_all_followed_channels()
     print("📡 Unique channels across all users:")
     for ch in all_channels:
         print("-", ch)
