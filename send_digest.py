@@ -12,8 +12,8 @@ TEMPLATE_DEFAULT = "digest_email.html"
 TEMPLATE_EMAIL_SAFE = "digest_email_safe.html"
 PREVIEW_HTML = "preview.html"
 PREVIEW_SAFE_HTML = "preview_safe.html"
-MOCK_DIGEST_PATH = "mock/mock_digest_data.json"
-MOCK_SKIPPED_PATH = "mock/mock_skipped_videos.json"
+MOCK_DIGEST_PATH = "tests/mock/mock_digest_data.json"
+MOCK_SKIPPED_PATH = "tests/mock/mock_skipped_videos.json"
 
 
 def load_json(path):

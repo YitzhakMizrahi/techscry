@@ -1,4 +1,5 @@
 # scorer.py
+# not being used in favor of smart_scorer
 
 import re
 

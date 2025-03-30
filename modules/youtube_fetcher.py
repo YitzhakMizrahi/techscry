@@ -14,30 +14,31 @@ def get_seen_path(user_id):
 
 
 def load_seen_video_ids(user_id):
-    path = get_seen_path(user_id)
-    if not path.exists():
+    seen_path = get_seen_path(user_id)
+    if not seen_path.exists():
         return set()
-    with open(path, "r", encoding="utf-8") as f:
+    with open(seen_path, "r", encoding="utf-8") as f:
         return set(json.load(f))
 
 
 def save_seen_video_ids(user_id, video_ids):
-    path = get_seen_path(user_id)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    seen_path = get_seen_path(user_id)
+    seen_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(seen_path, "w", encoding="utf-8") as f:
         json.dump(sorted(list(video_ids)), f, indent=2)
 
 
-def fetch_new_videos(rss_urls):
-    all_videos = []
-    skipped_ids = load_skipped_video_ids()
+def fetch_new_videos(rss_urls, user_id):
+    seen_ids = load_seen_video_ids(user_id)
+    skipped_ids = load_skipped_video_ids(user_id)
+    new_videos = []
 
     for channel in rss_urls:
         feed = feedparser.parse(channel["rss"])
         for entry in feed.entries:
             video_id = entry.yt_videoid
-            if video_id not in skipped_ids:
-                all_videos.append(
+            if video_id not in seen_ids and video_id not in skipped_ids:
+                new_videos.append(
                     {
                         "channel": channel["name"],
                         "video_id": video_id,
@@ -47,4 +48,4 @@ def fetch_new_videos(rss_urls):
                     }
                 )
 
-    return all_videos
+    return new_videos

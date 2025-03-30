@@ -23,14 +23,12 @@ CONFIG_PATH = "control_plane/config.yaml"
 MAX_VIDEOS = 5  # Temporary limit for development/testing
 
 
-def run_pipeline_for_user(
-    user_id, profile, verbose=False, send_direct_notifications=False
-):
+def run_pipeline_for_user(user_id, profile, verbose=False):
     with open(CONFIG_PATH, "r") as f:
         config = yaml.safe_load(f)
 
     youtube_sources = config.get("sources", {}).get("youtube", [])
-    new_videos = fetch_new_videos(youtube_sources)[:MAX_VIDEOS]
+    new_videos = fetch_new_videos(youtube_sources, user_id)[:MAX_VIDEOS]
     seen_ids = load_seen_video_ids(user_id)
 
     if not new_videos:
@@ -47,6 +45,7 @@ def run_pipeline_for_user(
         if not transcript:
             print("⚠️ Skipping due to missing transcript.")
             add_to_skipped(
+                user_id=user_id,
                 video_id=video["video_id"],
                 title=video["title"],
                 url=video["url"],
@@ -58,31 +57,16 @@ def run_pipeline_for_user(
             "preferred_channels", []
         )
         if channel_followed:
-            if send_direct_notifications:
-                print(
-                    "🎯 User follows this channel. Skipping scoring and sending direct alert."
-                )
-                send_email(
-                    subject=f"🔔 New Video from {video['channel']}: {video['title']}",
-                    html_body=(
-                        f"Channel: {video['channel']}<br>"
-                        f"Title: {video['title']}<br>"
-                        f"Link: <a href='{video['url']}'>{video['url']}</a><br><br>"
-                        f"(This video is from a channel the user follows directly.)"
-                    ),
-                    to=profile["email"],
-                )
-            else:
-                print("📥 Followed channel video queued for digest.")
-                add_to_user_digest(
-                    user_id,
-                    {
-                        "title": video["title"],
-                        "channel": video["channel"],
-                        "url": video["url"],
-                        "summary": "(This video is from a channel the user follows directly.)",
-                    },
-                )
+            print("📥 Followed channel video queued for digest.")
+            add_to_user_digest(
+                user_id,
+                {
+                    "title": video["title"],
+                    "channel": video["channel"],
+                    "url": video["url"],
+                    "summary": "This video is from a channel you follow directly.",
+                },
+            )
             seen_ids.add(video["video_id"])
             continue
 
