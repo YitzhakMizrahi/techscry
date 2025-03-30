@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![License](https://img.shields.io/badge/License-MIT-blue)
-![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-ff69b4)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scores them for relevance using LLMs, and delivers personalized daily digests and alerts to each user.
@@ -14,10 +13,9 @@ TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scor
 - 🔎 **Video Discovery**: Scrapes RSS feeds of relevant YouTube channels
 - 📝 **Transcription & Summarization**: Pulls transcripts and summarizes with OpenAI
 - 📊 **Smart Scoring**: Uses GPT-3.5/4 to determine if a video is relevant to each user
-- 📥 **Curated Digest Pool**: Relevant videos are queued until digest is sent
-- 📧 **Digest Delivery**: Users receive a curated list of videos at scheduled times
-- 👤 **User-Specific State**: Isolated digest queues, skipped videos, seen lists per user
-- 🧠 **Summary Cache**: Prevents redundant LLM calls, improves cost efficiency
+- 📬 **Digest System**: Queues relevant summaries into user-specific digests
+- 📧 **Email Notifications**: Sends digest or instant alerts to each user
+- 👥 **Multi-User Support**: Each user has isolated preferences and digest queues
 
 ---
 
@@ -26,64 +24,76 @@ TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scor
 ```bash
 techscry/
 ├── agents/              # Email agent (SMTP integration)
-├── control_plane/       # Orchestration logic
-│   └── orchestrator.py
-├── modules/             # Core modules for fetch/summarize/score/cache
+├── control_plane/       # Orchestration logic (run_pipeline etc)
+│   ├── orchestrator.py
+│   ├── config.yaml      # Static fallback channel list
+├── modules/             # Core modules (fetch, summarize, score)
 │   ├── youtube_fetcher.py
 │   ├── transcript_fetcher.py
 │   ├── summarizer.py
 │   ├── smart_scorer.py
-│   ├── summary_cache.py
-│   ├── skip_cache.py
 │   ├── user_digest.py
 │   ├── user_profile.py
-│   └── channel_pool.py
-├── templates/           # Digest HTML templates (email-safe and preview)
-├── users/               # Per-user state
+│   ├── skip_cache.py
+│   ├── channel_pool.py
+│   ├── summary_cache.py
+├── utils/               # Logging, flags, gates, etc.
+│   ├── logger.py
+│   ├── notification_gate.py
+├── templates/           # Digest HTML templates
+├── users/               # Per-user state and config
 │   └── <user_id>/
 │       ├── profile.json
 │       ├── seen.json
 │       ├── digest_queue.json
-│       └── skipped.json
-├── utils/               # Logging, cooldown, helper utils
-├── scripts/             # Entry points for CLI usage
+│       ├── skipped.json
+├── scripts/             # Executable scripts
 │   ├── run_pipeline.py
+│   ├── send_digest.py
 │   ├── send_curated_digest.py
-│   └── send_digest.py (legacy)
-├── data/                # Global logs and caches
-│   ├── summary_log.jsonl
-│   └── summary_cache.json
-└── tests/
-    └── mock/
-        ├── mock_digest_data.json
-        └── mock_skipped_videos.json
+├── tests/
+│   └── mock/
+│       ├── mock_digest_data.json
+│       └── mock_skipped_videos.json
+├── data/                # Global logs
+│   └── summary_log.jsonl
 ```
 
 ---
 
 ## 🔧 Setup
 
+1. **Clone the repo**
+
 ```bash
-git clone https://github.com/YitzhakMizrahi/techscry.git
+git clone https://github.com/yourname/techscry.git
 cd techscry
-py -3.12 -m venv .venv
-.venv\Scripts\activate
+```
+
+2. **Install dependencies**
+
+```bash
 pip install -r requirements.txt
 ```
 
-Create a `.env` file:
+3. **Create your .env**
 
 ```env
-OPENAI_API_KEY=sk-xxx
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
+OPENAI_API_KEY=your_openai_key_here
+MODEL_CHUNK=gpt-3.5-turbo
+MODEL_MERGE=gpt-3.5-turbo
+MAX_TOKENS_FOR_SAFE_SUMMARY=30000
+
 SMTP_USERNAME=your@email.com
-SMTP_PASSWORD=your_app_password
+SMTP_PASSWORD=your_password
+SMTP_SERVER=smtp.example.com
+SMTP_PORT=587
 ```
 
-Create a user profile:
+4. **Add a user**
 
 ```json
+// users/default/profile.json
 {
   "email": "your@email.com",
   "interests": {
@@ -103,77 +113,79 @@ Create a user profile:
 
 ## 🧪 Run the Pipeline
 
+### Run for All Users
+
 ```bash
-python scripts/run_pipeline.py [--verbose]
+python scripts/run_pipeline.py
 ```
+
+### Run for One User + Verbose Mode
+
+```bash
+python scripts/run_pipeline.py --verbose
+```
+
+More dev flags (coming soon): `--mock`, `--limit`, etc.
 
 ---
 
 ## 📬 Digest & Email
 
-### Preview Email (Mock or Real)
+### Preview Digest (with mock or real data)
 
 ```bash
-python scripts/send_curated_digest.py --mock --preview
+python scripts/send_digest.py --mock --preview
+python scripts/send_digest.py --preview
+```
+
+### Preview Final Curated Digest
+
+```bash
 python scripts/send_curated_digest.py --preview
 ```
 
 ### Send Digest Email
 
 ```bash
-python scripts/send_curated_digest.py
-```
-
-### Email-safe Version
-
-```bash
-python scripts/send_curated_digest.py --email-safe
+python scripts/send_digest.py
 ```
 
 ---
 
-## ⚙️ Flags Summary
+## 💡 Architecture Highlights
 
-| Flag           | Description                               |
-| -------------- | ----------------------------------------- |
-| `--mock`       | Use test data from `tests/mock/`          |
-| `--preview`    | Render email HTML and open in browser     |
-| `--email-safe` | Use stripped-down email-compatible styles |
-| `--verbose`    | Log debug output and smart scorer prompts |
+### Scoring Strategy
 
----
+| Type              | Logic                           | Action                 |
+| ----------------- | ------------------------------- | ---------------------- |
+| 🔔 Direct Channel | User follows the channel        | Add to digest (direct) |
+| 🧠 Smart Score    | LLM evaluates summary relevance | Score → Digest or Skip |
+| 🙅 Irrelevant     | Low score                       | Ignore                 |
 
-## 🧠 Architecture Highlights
+### User Isolation
 
-### 🧩 Relevance Logic
+Each user has their own:
 
-| Type            | Trigger                          | Action                     |
-| --------------- | -------------------------------- | -------------------------- |
-| 🔔 Direct Match | Channel in `preferred_channels`  | Queue instantly            |
-| 🧠 Smart Match  | Summary matches `keywords` (LLM) | Scored → queued or skipped |
-| 🙅 Irrelevant   | Low score or no match            | Ignore                     |
+- `seen.json`: Processed video IDs
+- `digest_queue.json`: Pending digest items
+- `skipped.json`: Skipped (e.g. no transcript)
+- `profile.json`: Notification preferences
 
-### 💾 Caching
+### Summary Efficiency
 
-- `summary_cache.json`: Prevents re-summarizing the same video
-- `summary_log.jsonl`: Audit log of summaries and scores
-
-### 📦 Per-User State
-
-- `seen.json`: Tracks previously processed videos
-- `digest_queue.json`: Queued items for next digest email
-- `skipped.json`: Videos with missing transcripts
+- All video summaries are cached in `data/summary_cache.json`
+- Logs are kept in `data/summary_log.jsonl`
+- Avoids repeated LLM calls
 
 ---
 
-## 🧭 Roadmap
+## 📦 Backlog Ideas
 
-- [ ] Cooldown enforcement before sending notifications ✅ (in progress)
-- [ ] User setting to switch between real-time vs digest delivery
-- [ ] CLI flags for mocking / faster dev iteration
-- [ ] Web onboarding and dashboard
-- [ ] Auto-generate RSS list from followed channels (YouTube API)
-- [ ] Digest styling improvements (visual polish)
+- User-facing UI for preferences
+- Richer HTML with video thumbnails
+- Telegram / WhatsApp delivery
+- Digest scheduling and batching
+- Webhook for new user onboarding
 
 ---
 
