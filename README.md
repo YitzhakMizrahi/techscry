@@ -1,5 +1,10 @@
 # 🧠 TechScry
 
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Made with](https://img.shields.io/badge/made%20with-%F0%9F%96%A5%20OpenAI-lightgrey)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+
 TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scores them for relevance using LLMs, and delivers personalized daily digests and alerts to each user.
 
 ---
