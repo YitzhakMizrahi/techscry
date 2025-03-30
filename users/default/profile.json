@@ -35,6 +35,10 @@
     ],
     "preferred_channels": ["OpenAI", "Fireship", "Sonny Sangha"]
   },
-  "notification_threshold": 0.5,
-  "digest_threshold": 0.3
+  "notification_settings": {
+    "notification_threshold": 0.5,
+    "digest_threshold": 0.3,
+    "max_per_digest": 5,
+    "cooldown_hours": 12
+  }
 }

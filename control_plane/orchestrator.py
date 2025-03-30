@@ -17,19 +17,21 @@ from agents.email_agent import send_email
 from modules.smart_scorer import smart_score_summary
 from modules.channel_pool import get_all_followed_channels
 from utils.logger import log_smart_score
+from utils.notification_gate import is_notification_allowed, update_last_notified
 
 CONFIG_PATH = "control_plane/config.yaml"
 MAX_VIDEOS = 5  # Temporary limit for development/testing
-DIGEST_LOWER_THRESHOLD = 0.3
 
 
-def run_pipeline_for_user(user_id, profile, verbose=False):
+def run_pipeline_for_user(
+    user_id, profile, verbose=False, send_direct_notifications=False
+):
     with open(CONFIG_PATH, "r") as f:
         config = yaml.safe_load(f)
 
     youtube_sources = config.get("sources", {}).get("youtube", [])
     new_videos = fetch_new_videos(youtube_sources)[:MAX_VIDEOS]
-    seen_ids = load_seen_video_ids()
+    seen_ids = load_seen_video_ids(user_id)
 
     if not new_videos:
         print("✅ No new videos found.")
@@ -56,19 +58,31 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
             "preferred_channels", []
         )
         if channel_followed:
-            print(
-                "🎯 User follows this channel. Skipping scoring and sending direct alert."
-            )
-            send_email(
-                subject=f"🔔 New Video from {video['channel']}: {video['title']}",
-                html_body=(
-                    f"Channel: {video['channel']}<br>"
-                    f"Title: {video['title']}<br>"
-                    f"Link: <a href='{video['url']}'>{video['url']}</a><br><br>"
-                    f"(This video is from a channel the user follows directly.)"
-                ),
-                to=profile["email"],
-            )
+            if send_direct_notifications:
+                print(
+                    "🎯 User follows this channel. Skipping scoring and sending direct alert."
+                )
+                send_email(
+                    subject=f"🔔 New Video from {video['channel']}: {video['title']}",
+                    html_body=(
+                        f"Channel: {video['channel']}<br>"
+                        f"Title: {video['title']}<br>"
+                        f"Link: <a href='{video['url']}'>{video['url']}</a><br><br>"
+                        f"(This video is from a channel the user follows directly.)"
+                    ),
+                    to=profile["email"],
+                )
+            else:
+                print("📥 Followed channel video queued for digest.")
+                add_to_user_digest(
+                    user_id,
+                    {
+                        "title": video["title"],
+                        "channel": video["channel"],
+                        "url": video["url"],
+                        "summary": "(This video is from a channel the user follows directly.)",
+                    },
+                )
             seen_ids.add(video["video_id"])
             continue
 
@@ -86,19 +100,10 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
         log_smart_score(user_id=user_id, video=video, score=score, summary=summary)
         log_summary(video, summary, score)
 
-        if score >= profile.get("notification_threshold", 0.5):
-            print("📧 Sending alert...")
-            email_subject = f"🔥 Tech Alert: {video['title']}"
-            email_body = (
-                f"Channel: {video['channel']}<br>"
-                f"Title: {video['title']}<br>"
-                f"Link: <a href='{video['url']}'>{video['url']}</a><br><br>"
-                f"Summary:<br>{summary}"
-            )
-            send_email(email_subject, email_body, to=profile["email"])
-
-        elif score >= profile.get("digest_threshold", DIGEST_LOWER_THRESHOLD):
-            print("📥 Added to user digest queue.")
+        if score >= profile.get("notification_settings", {}).get(
+            "notification_threshold", 0.5
+        ):
+            print("📥 Added to curated digest pool for later delivery.")
             add_to_user_digest(
                 user_id,
                 {
@@ -113,4 +118,4 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
 
         seen_ids.add(video["video_id"])
 
-    save_seen_video_ids(seen_ids)
+    save_seen_video_ids(user_id, seen_ids)
