@@ -13,9 +13,11 @@ TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scor
 - 🔎 **Video Discovery**: Scrapes RSS feeds of relevant YouTube channels
 - 📝 **Transcription & Summarization**: Pulls transcripts and summarizes with OpenAI
 - 📊 **Smart Scoring**: Uses GPT-3.5/4 to determine if a video is relevant to each user
-- 📬 **Digest System**: Queues relevant summaries into user-specific digests
+- 📥 **Digest Queue**: Collects top-scored videos for later delivery
 - 📧 **Email Notifications**: Sends digest or instant alerts to each user
-- 👥 **Multi-User Support**: Each user has isolated preferences and digest queues
+- 🧠 **Summary Caching**: Caches summaries to avoid duplicate LLM usage
+- 👥 **Multi-User Support**: Each user has isolated preferences and state files
+- ⚙️ **Cool-down & Notification Control**: Configurable per-user notification frequency
 
 ---
 
@@ -23,40 +25,42 @@ TechScry monitors cutting-edge YouTube channels, summarizes AI/tech videos, scor
 
 ```bash
 techscry/
-├── agents/              # Email agent (SMTP integration)
-├── control_plane/       # Orchestration logic (run_pipeline etc)
-│   ├── orchestrator.py
-│   ├── config.yaml      # Static fallback channel list
-├── modules/             # Core modules (fetch, summarize, score)
+├── agents/                # Email (SMTP) integration
+│   └── email_agent.py
+├── control_plane/         # Pipeline orchestration
+│   └── orchestrator.py
+│   └── config.yaml         # Legacy static channel list (overridden by user config)
+├── modules/              # Core system modules
 │   ├── youtube_fetcher.py
 │   ├── transcript_fetcher.py
 │   ├── summarizer.py
 │   ├── smart_scorer.py
+│   ├── skip_cache.py
 │   ├── user_digest.py
 │   ├── user_profile.py
-│   ├── skip_cache.py
 │   ├── channel_pool.py
 │   ├── summary_cache.py
-├── utils/               # Logging, flags, gates, etc.
-│   ├── logger.py
-│   ├── notification_gate.py
-├── templates/           # Digest HTML templates
-├── users/               # Per-user state and config
-│   └── <user_id>/
+├── scripts/              # CLI entry points
+│   ├── run_pipeline.py
+│   ├── send_digest.py         # Legacy global queue (deprecated)
+│   └── send_curated_digest.py # New curated user-based digest
+├── templates/            # Email digest HTML templates
+│   ├── digest_email.html
+│   └── digest_email_safe.html
+├── users/                # Per-user state and preferences
+│   └── default/
 │       ├── profile.json
 │       ├── seen.json
 │       ├── digest_queue.json
 │       ├── skipped.json
-├── scripts/             # Executable scripts
-│   ├── run_pipeline.py
-│   ├── send_digest.py
-│   ├── send_curated_digest.py
+├── data/                 # Shared/global data
+│   ├── summary_log.jsonl     # Global log of scored summaries
+│   └── summary_cache.json    # Deduplicated LLM summary cache
 ├── tests/
-│   └── mock/
-│       ├── mock_digest_data.json
+│   └── mock/             # Mock digest/skipped data for dev
+│       └── mock_digest_data.json
 │       └── mock_skipped_videos.json
-├── data/                # Global logs
-│   └── summary_log.jsonl
+└── .env.template         # Sample environment file
 ```
 
 ---
@@ -66,31 +70,41 @@ techscry/
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/yourname/techscry.git
+git clone https://github.com/YitzhakMizrahi/techscry.git
 cd techscry
 ```
 
-2. **Install dependencies**
+2. **Create & activate virtual environment**
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+source .venv/bin/activate   # Mac/Linux
+```
+
+3. **Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. **Create your .env**
+4. **Configure environment**
 
-```env
-OPENAI_API_KEY=your_openai_key_here
-MODEL_CHUNK=gpt-3.5-turbo
-MODEL_MERGE=gpt-3.5-turbo
-MAX_TOKENS_FOR_SAFE_SUMMARY=30000
-
-SMTP_USERNAME=your@email.com
-SMTP_PASSWORD=your_password
-SMTP_SERVER=smtp.example.com
-SMTP_PORT=587
+```bash
+cp .env.template .env
 ```
 
-4. **Add a user**
+Edit `.env` with your keys:
+
+```env
+OPENAI_API_KEY=sk-xxx
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your@email.com
+SMTP_PASSWORD=your_app_password
+```
+
+5. **Create a user profile**
 
 ```json
 // users/default/profile.json
@@ -113,79 +127,91 @@ SMTP_PORT=587
 
 ## 🧪 Run the Pipeline
 
-### Run for All Users
+Run the full fetch → summarize → score → queue pipeline.
 
 ```bash
 python scripts/run_pipeline.py
 ```
 
-### Run for One User + Verbose Mode
-
-```bash
-python scripts/run_pipeline.py --verbose
-```
-
-More dev flags (coming soon): `--mock`, `--limit`, etc.
-
 ---
 
-## 📬 Digest & Email
+## 📬 Digest Delivery
 
-### Preview Digest (with mock or real data)
-
-```bash
-python scripts/send_digest.py --mock --preview
-python scripts/send_digest.py --preview
-```
-
-### Preview Final Curated Digest
+### Preview Curated Digest (per-user queue)
 
 ```bash
 python scripts/send_curated_digest.py --preview
 ```
 
-### Send Digest Email
+### Send Curated Digest (real email)
 
 ```bash
-python scripts/send_digest.py
+python scripts/send_curated_digest.py
+```
+
+### Email-safe template
+
+```bash
+python scripts/send_curated_digest.py --email-safe
+```
+
+### Use mock data (for local testing only)
+
+```bash
+python scripts/send_digest.py --mock --preview
 ```
 
 ---
 
-## 💡 Architecture Highlights
+## ⚙️ Flags Summary
 
-### Scoring Strategy
+| Flag           | Description                               |
+| -------------- | ----------------------------------------- |
+| `--mock`       | Use test data from `tests/mock/`          |
+| `--preview`    | Render HTML preview and open in browser   |
+| `--email-safe` | Use inline styles for email compatibility |
 
-| Type              | Logic                           | Action                 |
-| ----------------- | ------------------------------- | ---------------------- |
-| 🔔 Direct Channel | User follows the channel        | Add to digest (direct) |
-| 🧠 Smart Score    | LLM evaluates summary relevance | Score → Digest or Skip |
-| 🙅 Irrelevant     | Low score                       | Ignore                 |
-
-### User Isolation
-
-Each user has their own:
-
-- `seen.json`: Processed video IDs
-- `digest_queue.json`: Pending digest items
-- `skipped.json`: Skipped (e.g. no transcript)
-- `profile.json`: Notification preferences
-
-### Summary Efficiency
-
-- All video summaries are cached in `data/summary_cache.json`
-- Logs are kept in `data/summary_log.jsonl`
-- Avoids repeated LLM calls
+You can combine flags like `--mock --preview` or `--email-safe --preview`.
 
 ---
 
-## 📦 Backlog Ideas
+## 💡 Architecture Notes
 
-- User-facing UI for preferences
-- Richer HTML with video thumbnails
-- Telegram / WhatsApp delivery
-- Digest scheduling and batching
-- Webhook for new user onboarding
+### Channel Source Strategy
+
+- Channels are automatically aggregated from each user’s profile
+- `channel_pool.py` builds a global pool of RSS feeds from all `preferred_channels`
+
+### Relevance Logic
+
+| Type            | Logic                  | Action                       |
+| --------------- | ---------------------- | ---------------------------- |
+| 🔔 Direct Match | Followed channel match | Skip scoring, queue directly |
+| 🧠 Smart Match  | LLM matches keywords   | Add to digest (or alert)     |
+| 🙅 Irrelevant   | Score below threshold  | Skip                         |
+
+### Summary Caching
+
+- `summary_cache.json` stores deduplicated summaries by `video_id`
+- Reused if the same video is reprocessed later
+- Reduces cost and speeds up re-runs
+
+### Digest Queue
+
+- Each user has their own `digest_queue.json`
+- Curated based on scoring, preferences, and cooldown logic
+- Only top N items are included in final delivery
+
+---
+
+## 📦 Backlog
+
+- Responsive email design for mobile
+- Scheduled task runner (hourly cron or loop)
+- Retry queue for failed summaries
+- Webhook/API onboarding
+- Notification frequency tuning UI
+- Real-time alert fallback mode (opt-in)
 
 ---
 
