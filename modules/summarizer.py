@@ -1,10 +1,10 @@
 # summarizer.py
-
 import os
 import json
 from dotenv import load_dotenv
 from utils.chunking import chunk_text
 from openai import OpenAI
+from modules.summary_cache import summary_exists, get_summary, save_summary
 
 load_dotenv()
 
@@ -37,7 +37,11 @@ def summarize_chunk(chunk):
         return None
 
 
-def summarize_text(transcript):
+def summarize_text(video_id, transcript):
+    if video_id and summary_exists(video_id):
+        print(f"✅ Summary cache hit for {video_id}. Skipping LLM call.")
+        return get_summary(video_id)
+
     if len(transcript.split()) > MAX_TOKENS_FOR_SAFE_SUMMARY:
         print(
             f"🚫 Transcript too long ({len(transcript.split())} words). Skipping summarization."
@@ -59,30 +63,34 @@ def summarize_text(transcript):
     if not summaries:
         return None
 
-    # Optionally: summarize the summaries (recursive)
     combined = "\n".join(summaries)
     if len(summaries) == 1:
-        return summaries[0]
+        final_summary = summaries[0]
+    else:
+        print("🧠 Merging chunk summaries...")
+        try:
+            response = client.chat.completions.create(
+                model=MODEL_MERGE,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant that merges short summaries into a final one.",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Merge these into a single concise summary:\n\n{combined}",
+                    },
+                ],
+            )
+            final_summary = response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"⚠️ Error during merge summarization: {e}")
+            final_summary = combined
 
-    print("🧠 Merging chunk summaries...")
-    try:
-        response = client.chat.completions.create(
-            model=MODEL_MERGE,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant that merges short summaries into a final one.",
-                },
-                {
-                    "role": "user",
-                    "content": f"Merge these into a single concise summary:\n\n{combined}",
-                },
-            ],
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"⚠️ Error during merge summarization: {e}")
-        return combined  # fallback: return concatenated chunk summaries
+    if video_id:
+        save_summary(video_id, final_summary)
+
+    return final_summary
 
 
 def log_summary(video, summary, score):
@@ -101,4 +109,4 @@ def log_summary(video, summary, score):
 if __name__ == "__main__":
     with open("example_transcript.txt", "r") as f:
         text = f.read()
-        print(summarize_text(text))
+        print(summarize_text("example_video_id", text))

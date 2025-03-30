@@ -1,3 +1,4 @@
+# orchestrator.py
 import sys
 import os
 import yaml
@@ -70,7 +71,7 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
             seen_ids.add(video["video_id"])
             continue
 
-        summary = summarize_text(transcript)
+        summary = summarize_text(video["video_id"], transcript)
         if not summary:
             print("⚠️ Summarization failed. Skipping.")
             continue

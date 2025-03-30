@@ -1,33 +1,177 @@
 [
   {
-    "title": "Detailed Directions with 4o Image Generation",
+    "title": "Our AI girlfriends just leveled up big time\u2026",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=UIVADiGfwWc",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "TikTok just released its React Native killer\u2026",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=-qjE8JkIVoQ",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "I replaced my entire tech stack with Postgres...",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=3JW732GrMdg",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "GPT-4.5 shocks the world with its lack of intelligence...",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=FW2XOIxaNqg",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "Claude 3.7 goes hard for programmers\u2026",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=x2WtHZciC74",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "Microsoft\u2019s new chip looks like science fiction\u2026",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=jwnez8HdN7E",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "4o Image Generation in ChatGPT and Sora",
     "channel": "OpenAI",
-    "url": "https://www.youtube.com/watch?v=ELwb_emN1p0",
-    "summary": "(This video is from a channel the user follows directly.)"
+    "url": "https://www.youtube.com/watch?v=2f3K43FHRKo",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "New ChatGPT voice mode updates \u2b07\ufe0f",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=mm4djPNO8os",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "How Protopica uses remix and blend in Sora",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=HvXVkdiWqcA",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "Booking.com personalizes travel at scale with AI-powered experiences",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=yUVL76cGXA4",
+    "summary": "This video is from a channel you follow directly."
+  },
+  {
+    "title": "4o Image Generation in ChatGPT and Sora",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=2f3K43FHRKo",
+    "summary": "A new feature in Chat GPT, native image generation, is showcased by lead researcher Gabe in a demo where the model combines text prompts with images to create visually engaging content. The model's accuracy is praised as a significant advancement, with potential applications in education and communication. The team discusses the model's ability to visualize concepts, showcasing examples like manga pages and trading cards made from text prompts and images. Furthermore, the speaker talks about a special hex code for a spring-themed launch, training a model to understand text and images to design a unique coin. They highlight the coin's potential and plan to make it transparent for printing, emphasizing the model's capability to maintain consistency across various terms. The transparent coin design is anticipated for release in Chacht and Sora, showcasing the AI capabilities. Excitement is expressed for users to explore creative possibilities with the technology."
+  },
+  {
+    "title": "New ChatGPT voice mode updates \u2b07\ufe0f",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=mm4djPNO8os",
+    "summary": "The transcript segment features a researcher named Manuka discussing updates to an advanced voice model that has a more engaging and natural tone, interrupts less, and allows more time for thoughts. A demo conversation with the model involves asking for advice on how to break awkward silences at a dinner party. The model suggests asking open-ended questions about hobbies or favorite experiences and recommends making a simple but impressive Caprese salad for the upcoming party."
+  },
+  {
+    "title": "Booking.com personalizes travel at scale with AI-powered experiences",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=yUVL76cGXA4",
+    "summary": "Booking.com has over 29 million listings and has evolved to offer not just accommodations but also flights, cars, transportation, and activities, known as the connector trip. The company is working with OpenAI to improve their services and offer more personalized experiences to users. By using AI, Booking.com aims to surface lesser-known destinations and improve matchmaking between travelers and partners. With AI-powered smart filters, they can personalize search results based on natural language queries. They are also developing AI-powered help scenarios to assist users 24/7 with itinerary changes. The goal is to provide superhuman travel experiences and make it easier for everyone to explore the world."
+  },
+  {
+    "title": "Audio Models in the API",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=lXb0L16ISAc",
+    "summary": "OpenAI introduces new voice agents development efforts led by Shen, Yaroslav, and Jeff Harris. They present three new models, including GPT-40 Transcribe and GPT-4 Mini Transcribe for speech-to-text accuracy in multiple languages, as well as GPT-40 Mini TTS for controlling speech tone and style. Updates to Speech-to-Text APIs offer streaming capabilities and noise cancellation tools. The Agents SDK is enhanced for voice agent support, showcasing a \"chained approach\" from text transcription to speech conversion. OpenAI FM demo is live, a contest for creative text-to-speech technology uses in progress, with entries accepted until Friday night."
+  },
+  {
+    "title": "4o Image Generation in ChatGPT and Sora",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=2f3K43FHRKo",
+    "summary": "The transcript introduces Chad GPT's native image generation launch, with a team including lead researcher Gabe and head of multimodal research Proful showcasing the model's ability to create images based on precise text prompts like anime frames and memes. The team emphasizes creative freedom and user control, demonstrating how the model visualizes complex concepts like the theory of relativity and enabling individuals without artistic skills to express creativity through image generation. They present the generation of a trading card and a unique coin design, highlighting the model's non-autoregressive training and its potential for conversational image editing and refinement. The project will be live on Chacht and Sora platforms with API integration forthcoming, with the team anticipating user-generated innovations."
+  },
+  {
+    "title": "New ChatGPT voice mode updates \u2b07\ufe0f",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=mm4djPNO8os",
+    "summary": "The transcript chunk discusses the improvements made to an advanced voice model to have a better personality and interrupt the user less. The model's new engaging tone allows the user more time to gather thoughts without feeling pressured to fill in gaps. A demonstration of the model includes asking for advice on breaking awkward silences at a dinner party and selecting an easy yet impressive dish to make. Suggestions for open-ended questions to engage conversation and the recommendation of a Caprese salad as a simple and elegant dish are provided."
+  },
+  {
+    "title": "How Protopica uses remix and blend in Sora",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=HvXVkdiWqcA",
+    "summary": "In this transcript chunk, the speaker is discussing using a tool called Sora to reshape their entire workflow. They mention using the features of remix and blend within Sora, which allow for swapping characters between different universes and creating transitions between clips. They explain that with remix, you can swap whatever you want in a shot, and with blend, you can create transitions between two clips. To use remix, you can click on any generated video or upload your own shot and specify what you want, while for blend, you choose the first clip and then the next one for the transition."
+  },
+  {
+    "title": "Booking.com personalizes travel at scale with AI-powered experiences",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=yUVL76cGXA4",
+    "summary": "The speaker discusses how travel can be challenging due to unexpected events, and how their company has over 29 million listings offering accommodations, flights, cars, transportation, and activities, which they refer to as the \"connector trip.\" They are working with OpenAI to enhance their services with artificial intelligence (AI) technology, including an AI trip planner and smart filters powered by AI. The goal is to use AI to better match travelers with their ideal trips and offer personalized recommendations. They aim to provide users with 24/7 help for making changes to their travel plans. The company's mission is to make travel easier for everyone, and they are excited about the potential of AI to assist in achieving this goal."
+  },
+  {
+    "title": "Audio Models in the API",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=lXb0L16ISAc",
+    "summary": "Olivia and the team introduced new models and tools for voice agents during a live stream, including GPT-4 Transcribe and Mini Transcribe for speech-to-text, and GPT-4 Mini TTS for text-to-speech. They highlighted features like different tones and prompt instructions, emphasized the ease of converting text-based agents to voice agents with an updated SDK, and showcased tools for debugging and tracing agent performance. Additionally, they promoted Open.FM, a contest for creative text-to-speech technology use on Twitter with prizes for the top three winners, open for participation until Friday."
   },
   {
     "title": "Stop ChatGPT from interrupting you \ud83d\ude44",
     "channel": "OpenAI",
     "url": "https://www.youtube.com/watch?v=KzrdJin9eio",
-    "summary": "This video is from a channel you follow directly."
+    "summary": "The speaker introduces themselves as part of a multimodal team for Chat GPT and explains that they have worked on a fix for a common issue related to pausing during interactions. Now, users can press and hold on the screen to pause, think, and respond as much as they want before releasing, at which point the model should respond. The speaker encourages users to continue providing feedback as they work on improving the user experience in the following weeks."
   },
   {
     "title": "ChatGPT's Team Reacts To How You're Using Voice and Video",
     "channel": "OpenAI",
     "url": "https://www.youtube.com/watch?v=vn6r4CedbqQ",
+    "summary": "The speaker is excited about the latest update with Chat GPT, which now includes an advanced voice video feature. This feature allows users to point their phone at anything, and Chat GPT can tell them what it sees. The speaker, who works on the multimod team for Chat GPT, is a photography enthusiast and often uses the feature to get tips on composition and photo editing in Lightroom. The feature can provide advice on composition, lighting, and contrast to help improve photos. The speaker finds the feature useful for discussions about photography and enjoys working with Chat GPT, especially for hobbies they enjoy."
+  },
+  {
+    "title": "OpenAI\u2019s new image generator hits different...",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=Bt-7YiNBvLE",
     "summary": "This video is from a channel you follow directly."
   },
   {
-    "title": "What\u2019s your favorite accent to use on ChatGPT Advanced Voice?",
+    "title": "4o Image Generation in ChatGPT and Sora",
     "channel": "OpenAI",
-    "url": "https://www.youtube.com/watch?v=skrKS3xN8F8",
-    "summary": "This video is from a channel you follow directly."
+    "url": "https://www.youtube.com/watch?v=2f3K43FHRKo",
+    "summary": "The transcripts detail the launch of native image generation in Chat GPT, showcasing its capabilities in creating images with text prompts. The team aims to offer users creative freedom by controlling the output to a high degree, demonstrated through anime frames from selfies, memes, and trading card designs. The model's potential in professional, educational, and creative contexts is emphasized, with a specific example of creating a memorable coin. The model is designed to understand text and images, providing a seamless multimodal experience for users. Additionally, a new hex code for a spring-themed launch is introduced, focusing on creating a unique color for a coin and utilizing the model for image editing and refinement. The speaker expresses excitement about the visual potential of AI models and the release of the coin with added transparency for printing."
   },
   {
-    "title": "\ud83d\udcac ChatGPT's Team Responds to Your Advanced Voice Questions #Shorts",
+    "title": "New ChatGPT voice mode updates \u2b07\ufe0f",
     "channel": "OpenAI",
-    "url": "https://www.youtube.com/watch?v=7Nuf8CrYdaI",
-    "summary": "This video is from a channel you follow directly."
+    "url": "https://www.youtube.com/watch?v=mm4djPNO8os",
+    "summary": "The speaker, Manuka, introduces improvements to the advanced voice model, highlighting a better personality and reduced interruptions. The model now has a more engaging and natural tone, leading to less interruptions and allowing for more time to gather thoughts. An interaction with the model demonstrates asking for advice on breaking awkward silences at a dinner party, receiving tips on asking open-ended questions, and being recommended a simple yet impressive Caprese salad recipe for the party."
+  },
+  {
+    "title": "How Protopica uses remix and blend in Sora",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=HvXVkdiWqcA",
+    "summary": "In this segment from the transcript, the speaker discusses using \"remix\" and \"blend\" to reshape their workflow. They mention swapping characters between different universes as an example of using remix. They explain that with remix, one can swap elements within a shot to create a new version. Additionally, they discuss using blend to create a transition between the elements in the video. They explain the process of using remix and blend to combine different clips and create a new video."
+  },
+  {
+    "title": "Booking.com personalizes travel at scale with AI-powered experiences",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=yUVL76cGXA4",
+    "summary": "The speaker discusses the challenges of booking travel and introduces the evolution of their offerings, including accommodations, flights, cars, transportation, and activities which they refer to as the \"connector trip.\" They are working closely with OpenAI to enhance their services, including developing an AI trip planner and utilizing machine learning for matchmaking between travelers and partners. The focus is on providing personalized travel experiences and creating a seamless customer service experience. They aim to make it easier for everyone to experience the world using AI technology."
+  },
+  {
+    "title": "Audio Models in the API",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=lXb0L16ISAc",
+    "summary": "OpenAI has recently released the agent ASdk, which enables users to build custom voice agents, and introduced new models such as GPT-40 Transcribe and GPT-4 mini transcribe. These models offer improved accuracy across multiple languages. They also unveiled the GPT-40 Mini TTS text-to-speech model, providing developers with more control over speech generation. Furthermore, updates to the Agents SDK simplify the conversion of text-based agents into voice agents, showcased with an AI stylist UI agent example. Features like streaming, debugging tools, and performance monitoring were also added for enhanced user experiences. Additionally, OpenAI.FM hosted a live demo, and a contest was announced for users to showcase creative uses of text-to-speech technology on Twitter, with a special edition radio from Teenage Engineering up for grabs."
+  },
+  {
+    "title": "Stop ChatGPT from interrupting you \ud83d\ude44",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=KzrdJin9eio",
+    "summary": "The speaker introduces themselves as part of a multimodal team for Chat GPT and explains that they have worked on a fix for a common issue related to pausing during interactions. Now, users can press and hold on the screen to pause, think, and respond as much as they want before releasing, at which point the model should respond. The speaker encourages users to continue providing feedback as they work on improving the user experience in the following weeks."
+  },
+  {
+    "title": "ChatGPT's Team Reacts To How You're Using Voice and Video",
+    "channel": "OpenAI",
+    "url": "https://www.youtube.com/watch?v=vn6r4CedbqQ",
+    "summary": "The speaker is excited about the latest update with Chat GPT, which now includes an advanced voice video feature. This feature allows users to point their phone at anything, and Chat GPT can tell them what it sees. The speaker, who works on the multimod team for Chat GPT, is a photography enthusiast and often uses the feature to get tips on composition and photo editing in Lightroom. The feature can provide advice on composition, lighting, and contrast to help improve photos. The speaker finds the feature useful for discussions about photography and enjoys working with Chat GPT, especially for hobbies they enjoy."
   },
   {
     "title": "OpenAI\u2019s new image generator hits different...",
