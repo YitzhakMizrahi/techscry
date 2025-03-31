@@ -1,55 +1,5 @@
 [
   {
-    "video_id": "jwnez8HdN7E",
-    "title": "Microsoft\u2019s new chip looks like science fiction\u2026",
-    "channel": "Fireship",
-    "url": "https://www.youtube.com/watch?v=jwnez8HdN7E",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:13:16.497080",
-    "notified": false
-  },
-  {
-    "video_id": "b0XI-cbel1U",
-    "title": "Is Elon\u2019s Grok 3 the new AI king?",
-    "channel": "Fireship",
-    "url": "https://www.youtube.com/watch?v=b0XI-cbel1U",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:13:17.683623",
-    "notified": false
-  },
-  {
-    "video_id": "tPZauAYgVRQ",
-    "title": "Elon Musk attempts hostile takeover of OpenAI\u2026",
-    "channel": "Fireship",
-    "url": "https://www.youtube.com/watch?v=tPZauAYgVRQ",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:13:18.528012",
-    "notified": false
-  },
-  {
-    "video_id": "ozkg_iW9mNU",
-    "title": "UK demands backdoor for encrypted Apple user data...",
-    "channel": "Fireship",
-    "url": "https://www.youtube.com/watch?v=ozkg_iW9mNU",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:13:19.428185",
-    "notified": false
-  },
-  {
-    "video_id": "iBFHWS8rbW4",
-    "title": "\ud83d\udd34 Let's build a Receipt Tracker SaaS with NEXT.JS 15 (AI Agents, Inngest, Schematic, Stripe, Clerk)",
-    "channel": "Sonny Sangha",
-    "url": "https://www.youtube.com/watch?v=iBFHWS8rbW4",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:13:20.708744",
-    "notified": false
-  },
-  {
     "video_id": "RTP5fDHEx34",
     "title": "\ud83d\udd34 Your ULTIMATE Full Stack 2025 Developer Roadmap! - Day 5 (How to Leverage AI Agents & SaaS)",
     "channel": "Sonny Sangha",
@@ -150,6 +100,16 @@
     "notified": false
   },
   {
+    "video_id": "HyzlYwjoXOQ",
+    "title": "I gave Claude root access to my server... Model Context Protocol explained",
+    "channel": "Fireship",
+    "url": "https://www.youtube.com/watch?v=HyzlYwjoXOQ",
+    "summary": "This video is from a channel you follow directly.",
+    "score": 1.0,
+    "added_at": "2025-03-31T20:16:25.420575",
+    "notified": false
+  },
+  {
     "video_id": "KzrdJin9eio",
     "title": "Stop ChatGPT from interrupting you \ud83d\ude44",
     "channel": "OpenAI",
@@ -177,16 +137,6 @@
     "summary": "The speaker, Rocky from the Chach PT iOS app, addresses issues where the model responds to background noise as speech, such as in crowded areas. The team is working on filtering out this noise to focus more on the user. They are also exploring ways to make the model understand when the user has finished speaking or is pausing to think for a more natural conversation flow. Tips are provided for iPhone users to improve voice isolation and control model responses, with similar features coming soon for Android. Feedback is encouraged as it may lead to new app features in the future.",
     "score": 0.6,
     "added_at": "2025-03-31T20:16:24.631832",
-    "notified": false
-  },
-  {
-    "video_id": "HyzlYwjoXOQ",
-    "title": "I gave Claude root access to my server... Model Context Protocol explained",
-    "channel": "Fireship",
-    "url": "https://www.youtube.com/watch?v=HyzlYwjoXOQ",
-    "summary": "This video is from a channel you follow directly.",
-    "score": 1.0,
-    "added_at": "2025-03-31T20:16:25.420575",
     "notified": false
   }
 ]
