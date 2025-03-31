@@ -1,0 +1,41 @@
+# Normalize line endings for consistency
+*.py text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Treat environment templates and configs as text
+*.env text
+*.template text
+
+# Binary files (disable diff and merge)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+
+# Ignore preview outputs from git archive
+preview.html export-ignore
+preview_safe.html export-ignore
+
+digests/** export-ignore
+logs/** export-ignore
+
+# GitHub language stats hinting
+*.py linguist-language=Python
+*.html linguist-language=HTML
+*.js linguist-language=JavaScript
+*.ts linguist-language=TypeScript
+
+# Catch common backup/editor junk
+*~ export-ignore
+*.swp export-ignore
+.DS_Store export-ignore
