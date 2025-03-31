@@ -1,7 +1,8 @@
+# send_curated_digest.py (patched to use curation_pool)
+
 import os
 import sys
 
-# Ensure root directory is in path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import json
@@ -10,6 +11,8 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from agents.email_agent import send_email
 from modules.user_profile import load_user_profiles
+from modules.curation_pool import load_curation_pool, save_curation_pool
+from modules.skip_cache import load_skipped_videos
 
 TEMPLATE_DIR = "templates"
 TEMPLATE_DEFAULT = "digest_email.html"
@@ -20,25 +23,13 @@ PREVIEW_SAFE_HTML = "preview_safe.html"
 MAX_ITEMS_DEFAULT = 5
 
 
-def load_user_digest(user_id):
-    path = os.path.join("users", user_id, "digest_queue.json")
-    if not os.path.exists(path):
-        return []
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def save_user_digest(user_id, items):
-    path = os.path.join("users", user_id, "digest_queue.json")
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(items, f, indent=2)
-
-
-def render_digest_email(digest_items, email_safe=False):
+def render_digest_email(digest_items, skipped_videos=None, email_safe=False):
     env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
     template_name = TEMPLATE_EMAIL_SAFE if email_safe else TEMPLATE_DEFAULT
     template = env.get_template(template_name)
-    return template.render(digest_items=digest_items, skipped_videos=[])
+    return template.render(
+        digest_items=digest_items, skipped_videos=skipped_videos or []
+    )
 
 
 def main():
@@ -61,15 +52,19 @@ def main():
 
     for profile in profiles:
         user_id = profile["user_id"]
-        digest_items = load_user_digest(user_id)
-        if not digest_items:
+        pool = load_curation_pool(user_id)
+        if not pool:
             print(f"📭 No digest items for user: {user_id}")
             continue
 
-        digest_items.sort(key=lambda x: x.get("score", 0), reverse=True)
-        top_items = digest_items[: args.max]
+        # Sort by score or added_at
+        sorted_pool = sorted(pool, key=lambda x: x.get("score", 0), reverse=True)
+        top_items = sorted_pool[: args.max]
 
-        html = render_digest_email(top_items, email_safe=args.email_safe)
+        skipped_videos = load_skipped_videos(user_id)
+        html = render_digest_email(
+            top_items, skipped_videos, email_safe=args.email_safe
+        )
 
         if args.preview:
             preview_path = PREVIEW_SAFE_HTML if args.email_safe else PREVIEW_HTML
@@ -83,8 +78,9 @@ def main():
             send_email(subject, html, to=profile["email"])
             print(f"📧 Digest sent to {user_id} with {len(top_items)} items.")
 
-            remaining = digest_items[args.max :]
-            save_user_digest(user_id, remaining)
+            # Remove sent items from the pool
+            remaining = sorted_pool[args.max :]
+            save_curation_pool(user_id, remaining)
 
 
 if __name__ == "__main__":

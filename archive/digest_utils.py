@@ -1,4 +1,5 @@
 # digest_utils.py
+# outdated global queue logic
 
 import json
 import os

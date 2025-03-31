@@ -1,4 +1,4 @@
-# orchestrator.py
+# orchestrator.py (patched to use curation_pool)
 import sys
 import os
 import yaml
@@ -13,7 +13,7 @@ from modules.youtube_fetcher import (
 from modules.transcript_fetcher import fetch_transcript
 from modules.summarizer import summarize_text, log_summary
 from modules.skip_cache import add_to_skipped
-from modules.user_digest import add_to_user_digest
+from modules.curation_pool import add_to_curation_pool
 from agents.email_agent import send_email
 from modules.smart_scorer import smart_score_summary
 from modules.channel_pool import get_all_followed_channels
@@ -59,13 +59,15 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
         )
         if channel_followed:
             print("📥 Followed channel video queued for digest.")
-            add_to_user_digest(
+            add_to_curation_pool(
                 user_id,
                 {
+                    "video_id": video["video_id"],
                     "title": video["title"],
                     "channel": video["channel"],
                     "url": video["url"],
                     "summary": "This video is from a channel you follow directly.",
+                    "score": 1.0,
                 },
             )
             seen_ids.add(video["video_id"])
@@ -89,13 +91,15 @@ def run_pipeline_for_user(user_id, profile, verbose=False):
             "notification_threshold", 0.5
         ):
             print("📥 Added to curated digest pool for later delivery.")
-            add_to_user_digest(
+            add_to_curation_pool(
                 user_id,
                 {
+                    "video_id": video["video_id"],
                     "title": video["title"],
                     "channel": video["channel"],
                     "url": video["url"],
                     "summary": summary,
+                    "score": score,
                 },
             )
         else:
