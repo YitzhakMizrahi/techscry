@@ -1,13 +1,20 @@
 {
   "cSpell.words": [
+    "agentsdk",
     "autogen",
+    "cooldown",
     "dotenv",
+    "Fireship",
     "Firestore",
+    "langchain",
     "multimodal",
     "Scry",
     "Streamlit",
+    "supabase",
     "techscry",
     "unskipped",
-    "videoid"
+    "venv",
+    "videoid",
+    "Vkdi"
   ]
 }
