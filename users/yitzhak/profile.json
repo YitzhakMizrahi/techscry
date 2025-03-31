@@ -1,0 +1,23 @@
+{
+  "email": "mizrahi.yitzchak@gmail.com",
+  "interests": {
+    "keywords": [
+      "frontend",
+      "astro",
+      "htmx",
+      "solidjs",
+      "tailwind",
+      "react",
+      "remix",
+      "build systems",
+      "AI"
+    ],
+    "preferred_channels": ["ThePrimeagen", "Fireship"]
+  },
+  "notification_settings": {
+    "notification_threshold": 0.6,
+    "digest_threshold": 0.4,
+    "max_per_digest": 5,
+    "cooldown_hours": 8
+  }
+}

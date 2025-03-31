@@ -6,6 +6,12 @@
     "channel": "OpenAI"
   },
   {
+    "video_id": "ELwb_emN1p0",
+    "title": "Detailed Directions with 4o Image Generation",
+    "url": "https://www.youtube.com/watch?v=ELwb_emN1p0",
+    "channel": "OpenAI"
+  },
+  {
     "video_id": "E9RN8jX--uc",
     "title": "OpenAI 4o Image Generation",
     "url": "https://www.youtube.com/watch?v=E9RN8jX--uc",
@@ -18,27 +24,9 @@
     "channel": "OpenAI"
   },
   {
-    "video_id": "tMhAASk9i1o",
-    "title": "Transparent Layers with 4o Image Generation",
-    "url": "https://www.youtube.com/watch?v=tMhAASk9i1o",
-    "channel": "OpenAI"
-  },
-  {
     "video_id": "jevonM6gBcA",
     "title": "Visual Restyling with 4o Image Generation",
     "url": "https://www.youtube.com/watch?v=jevonM6gBcA",
     "channel": "OpenAI"
-  },
-  {
-    "video_id": "ELwb_emN1p0",
-    "title": "Detailed Directions with 4o Image Generation",
-    "url": "https://www.youtube.com/watch?v=ELwb_emN1p0",
-    "channel": "OpenAI"
-  },
-  {
-    "video_id": "1-kq6llhQDI",
-    "title": "How to add Role-Based Access Control in Next.js 15: Protected Routes & APIs (Auth0 RBAC Tutorial)",
-    "url": "https://www.youtube.com/watch?v=1-kq6llhQDI",
-    "channel": "Sonny Sangha"
   }
 ]

@@ -8,3 +8,13 @@ sources:
       rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCqeTj_QAnNlmt7FwzNwHZnA
     - name: David Ondrej
       rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCPGrgwfbkjTIgPoOh2q1BAg
+    - name: Two Minute Papers
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l4upoX8nvctg
+    - name: ThePrimeagen
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw
+    - name: Joma Tech
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCV0qA-eDDICsRR9rPcnG7tw
+    - name: Marques Brownlee
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ
+    - name: Andrej Karpathy
+      rss: https://www.youtube.com/feeds/videos.xml?channel_id=UCgBncpylJ1kiVaPyP-PZauQ

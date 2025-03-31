@@ -1,4 +1,4 @@
-# send_curated_digest.py (patched to use curation_pool)
+# send_curated_digest.py (patched to use curation_pool and respect cooldowns)
 
 import os
 import sys
@@ -13,6 +13,7 @@ from agents.email_agent import send_email
 from modules.user_profile import load_user_profiles
 from modules.curation_pool import load_curation_pool, save_curation_pool
 from modules.skip_cache import load_skipped_videos
+from utils.notification_gate import is_notification_allowed, update_last_notified
 
 TEMPLATE_DIR = "templates"
 TEMPLATE_DEFAULT = "digest_email.html"
@@ -52,6 +53,11 @@ def main():
 
     for profile in profiles:
         user_id = profile["user_id"]
+
+        if not is_notification_allowed(user_id, profile):
+            print(f"⏳ Cooldown active for user '{user_id}', skipping.")
+            continue
+
         pool = load_curation_pool(user_id)
         if not pool:
             print(f"📭 No digest items for user: {user_id}")
@@ -77,6 +83,8 @@ def main():
             subject = "🗞️ Your TechScry Digest"
             send_email(subject, html, to=profile["email"])
             print(f"📧 Digest sent to {user_id} with {len(top_items)} items.")
+
+            update_last_notified(user_id)
 
             # Remove sent items from the pool
             remaining = sorted_pool[args.max :]
