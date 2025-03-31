@@ -1,4 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Environments
 .venv/
 .env
-preview_safe.html
+.env.*
+
+# Editor-specific
+.vscode/
+.idea/
+*.swp
+
+# Data & cache
+data/
+logs/
+digests/
+*.jsonl
+summary_cache.json
+
+# User state
+users
+
+# Preview output
 preview.html
+preview_safe.html
