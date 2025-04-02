@@ -37,6 +37,7 @@ A living roadmap outlining active priorities, near-term upgrades, and long-term 
 - 📨 Create `digest_runner.py` that respects per-user cooldown timers for delivery
 - 👥 Multi-user mock data generator
 - 💬 Digest email footer with opt-out / feedback link
+- When a digest is created maybe make it create a user named directory first and the digest inside??
 
 ---
 
