@@ -1,9 +1,6 @@
-# orchestrator.py (patched to use curation_pool)
-import sys
-import os
-import yaml
+# control_plane/orchestrator.py (cleaned up for proper import handling)
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import yaml
 
 from modules.youtube_fetcher import (
     fetch_new_videos,
