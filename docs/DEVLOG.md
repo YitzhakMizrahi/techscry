@@ -14,7 +14,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 📬 Digest & Email System (March 28–30)
+## 📬 Digest & Email System
+
+**Date**: March 28–30, 2025
 
 - ✅ Designed HTML email digest templates
 - ✅ Implemented `send_digest.py` with preview and mock flags
@@ -23,7 +25,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 🧠 Smart Scoring + Profiles (March 30)
+## 🧠 Smart Scoring + Profiles
+
+**Date**: March 30, 2025
 
 - ✅ `smart_scorer.py`: LLM-based scoring using GPT
 - ✅ Scoring prompt includes user profile context (interests, channels)
@@ -32,7 +36,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 🔁 Seen/Skipped/Digest Per User (March 31)
+## 🔁 Seen/Skipped/Digest Per User
+
+**Date**: March 31, 2025
 
 - ✅ Moved `seen_videos.json`, `skipped.json`, and `digest_queue.json` under `users/<user_id>/`
 - ✅ Created per-user directories with isolated state
@@ -40,7 +46,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 📥 Curated Digest & Notification Gate (March 31)
+## 📅 Curated Digest & Notification Gate
+
+**Date**: March 31, 2025
 
 - ✅ `send_curated_digest.py` introduced (user-based curated queue)
 - ✅ Notification cooldown logic added via `notification_gate.py`
@@ -48,7 +56,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 🧠 Summary Caching (April 1, 2025)
+## 🧠 Summary Caching
+
+**Date**: April 1, 2025
 
 - ✅ `summary_cache.py` implemented
 - ✅ Skips LLM if summary already exists in cache
@@ -57,7 +67,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 🧪 Improved Dev Experience (April 1, 2025)
+## 🧪 Improved Dev Experience
+
+**Date**: April 1, 2025
 
 - ✅ `tests/mock/` structure for digest/skipped previewing
 - ✅ Flags for `--mock`, `--preview`, `--email-safe`
@@ -66,7 +78,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 📦 Internal Refactoring & Cleanup (April 1, 2025)
+## 📦 Internal Refactoring & Cleanup
+
+**Date**: April 1, 2025
 
 - ✅ Archived legacy `scorer.py` (replaced by smart scoring)
 - ✅ Moved mock files into `tests/`
@@ -75,7 +89,9 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 🧘 Looping + Observability Added (April 1, 2025)
+## 🧘 Looping + Observability Added
+
+**Date**: April 1, 2025
 
 - ✅ `loop_runner.py` added for repeat execution with interval control
 - ✅ Introduced `--dry-run` for `run_pipeline.py`
