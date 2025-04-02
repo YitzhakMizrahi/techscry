@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 from modules.user_profile import load_user_profiles
 from agents.email_agent import send_email
 
+
 TEMPLATE_DIR = "templates"
 TEMPLATE_DEFAULT = "digest_email.html"
 TEMPLATE_EMAIL_SAFE = "digest_email_safe.html"

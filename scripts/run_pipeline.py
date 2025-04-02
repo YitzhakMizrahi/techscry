@@ -1,4 +1,4 @@
-# run_pipeline.py (patched with --dry-run, structured logging)
+# run_pipeline.py (cleaned up to use centralized logger config)
 
 import os
 import sys
@@ -6,25 +6,11 @@ import argparse
 import json
 from datetime import datetime, timezone
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Removed sys.path manipulation for clean -m support
 
 from modules.user_profile import load_user_profiles, load_user_profile
 from control_plane.orchestrator import run_pipeline_for_user
-
-PIPELINE_LOG_PATH = "logs/pipeline_log.jsonl"
-
-
-def log_pipeline_run(user_id, dry_run):
-    os.makedirs(os.path.dirname(PIPELINE_LOG_PATH), exist_ok=True)
-    entry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "user": user_id,
-        "action": "pipeline_run",
-        "mode": "dry_run" if dry_run else "real",
-        "status": "executed" if not dry_run else "simulated",
-    }
-    with open(PIPELINE_LOG_PATH, "a", encoding="utf-8") as f:
-        f.write(json.dumps(entry) + "\n")
+from utils.logger import log_pipeline_event
 
 
 def main():
@@ -44,7 +30,12 @@ def main():
         print(f"🔧 Running pipeline for user: {args.user} (dry_run={args.dry_run})")
         if not args.dry_run:
             run_pipeline_for_user(args.user, profile, verbose=args.verbose)
-        log_pipeline_run(args.user, args.dry_run)
+        log_pipeline_event(
+            args.user,
+            action="pipeline_run",
+            mode="dry_run" if args.dry_run else "real",
+            status="simulated" if args.dry_run else "executed",
+        )
     else:
         user_profiles = load_user_profiles()
         if not user_profiles:
@@ -57,7 +48,12 @@ def main():
             print(f"\n🔧 Processing user: {user_id} (dry_run={args.dry_run})")
             if not args.dry_run:
                 run_pipeline_for_user(user_id, profile, verbose=args.verbose)
-            log_pipeline_run(user_id, args.dry_run)
+            log_pipeline_event(
+                user_id,
+                action="pipeline_run",
+                mode="dry_run" if args.dry_run else "real",
+                status="simulated" if args.dry_run else "executed",
+            )
 
 
 if __name__ == "__main__":

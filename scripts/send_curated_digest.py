@@ -1,19 +1,17 @@
-# send_curated_digest.py (patched with --log-only, --save-html, structured logging)
+# send_curated_digest.py (cleaned to support -m execution, removed sys.path hack)
 
 import os
-import sys
 import json
 import argparse
 from datetime import datetime, timezone
 from jinja2 import Environment, FileSystemLoader
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from agents.email_agent import send_email
 from modules.user_profile import load_user_profiles
 from modules.curation_pool import load_curation_pool, save_curation_pool
 from modules.skip_cache import load_skipped_videos
 from utils.notification_gate import is_notification_allowed, update_last_notified
+
 
 TEMPLATE_DIR = "templates"
 TEMPLATE_DEFAULT = "digest_email.html"

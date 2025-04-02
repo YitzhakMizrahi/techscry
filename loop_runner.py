@@ -1,4 +1,4 @@
-# techscry/loop_runner.py
+# loop_runner.py (finalized for -m usage with validation and runtime init)
 
 import time
 import subprocess
@@ -6,14 +6,20 @@ import argparse
 import sys
 
 
-def loop_runner(script_path, script_args, interval):
+def loop_runner(module_path, script_args, interval):
     args_display = " ".join(script_args) if script_args else ""
-    print(f"🔁 Starting loop: {script_path} {args_display} (every {interval}s)")
+    print(f"🔁 Starting loop: {module_path} {args_display} (every {interval}s)")
     try:
         while True:
             print("\n⏱️ Running script at:", time.strftime("%Y-%m-%d %H:%M:%S"))
             try:
-                subprocess.run([sys.executable, script_path] + script_args, check=False)
+                if module_path.endswith(".py"):
+                    raise ValueError(
+                        "❌ Please use dotted module path (e.g. scripts.run_pipeline), not .py files."
+                    )
+                subprocess.run(
+                    [sys.executable, "-m", module_path] + script_args, check=False
+                )
             except Exception as e:
                 print("⚠️ Script execution failed:", e)
             time.sleep(interval)
@@ -23,7 +29,11 @@ def loop_runner(script_path, script_args, interval):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--script", required=True, help="Path to script to run in loop")
+    parser.add_argument(
+        "--script",
+        required=True,
+        help="Dotted module path to run (e.g. scripts.run_pipeline)",
+    )
     parser.add_argument(
         "--args", nargs=argparse.REMAINDER, help="Args to pass to the script"
     )
