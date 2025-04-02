@@ -30,18 +30,18 @@ techscry/
 ├── agents/                  # Email agent (SMTP)
 ├── archive/                 # Deprecated modules
 ├── config/                  # Interest profile seed
-├── control_plane/          # Orchestration logic
-├── data/                   # Shared cache (summaries)
-├── digests/                # Saved email HTML output
-├── docs/                   # Docs: DEVLOG, ROADMAP, DECISIONS
-├── modules/                # Core logic modules
-├── scripts/                # CLI entrypoints (digest, pipeline)
-├── templates/              # Jinja HTML email templates
-├── tests/mock/             # Preview/test fixtures
-├── users/                  # Per-user state & preferences
-├── utils/                  # Utilities (logger, cooldown, chunking)
-├── loop_runner.py          # Universal interval-based loop executor
-├── .env.template           # Configuration template
+├── control_plane/           # Orchestration logic
+├── data/                    # Shared cache (summaries)
+├── digests/                 # Saved email HTML output
+├── docs/                    # Docs: DEVLOG, ROADMAP, DECISIONS
+├── modules/                 # Core logic modules
+├── scripts/                 # CLI entrypoints (digest, pipeline)
+├── templates/               # Jinja HTML email templates
+├── tests/mock/              # Preview/test fixtures
+├── users/                   # Per-user state & preferences
+├── utils/                   # Utilities (logger, cooldown, chunking)
+├── loop_runner.py           # Universal interval-based loop executor
+├── .env.template            # Configuration template
 └── requirements.txt
 ```
 
@@ -100,11 +100,14 @@ Create a profile like this:
 
 ## 🔁 Background Automation
 
-Use `loop_runner.py` to schedule:
+Use `loop_runner.py` with `-m` to schedule background tasks:
 
 ```bash
-python loop_runner.py --script scripts/run_pipeline.py --args --dry-run --interval 900
-python loop_runner.py --script scripts/send_curated_digest.py --args --log-only --interval 900
+# ❗ Usage Reminder
+All scripts must be run using `-m` from the project root. For example:
+
+python -m loop_runner --script scripts.run_pipeline --interval 900 --args --dry-run
+python -m loop_runner --script scripts.send_curated_digest --interval 900 --args --log-only
 ```
 
 ---
