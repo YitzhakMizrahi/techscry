@@ -8,7 +8,6 @@ __pycache__/
 # Environments
 .venv/
 .env
-.env.*
 
 # Editor-specific
 .vscode/
