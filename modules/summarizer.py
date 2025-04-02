@@ -8,7 +8,7 @@ from modules.summary_cache import summary_exists, get_summary, save_summary
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=0)
 
 MODEL_CHUNK = os.getenv("MODEL_CHUNK", "gpt-3.5-turbo")
 MODEL_MERGE = os.getenv("MODEL_MERGE", "gpt-3.5-turbo")
@@ -32,6 +32,9 @@ def summarize_chunk(chunk):
             ],
         )
         return response.choices[0].message.content.strip()
+    except KeyboardInterrupt:
+        print("🛑 Interrupted during summarization. Exiting cleanly.")
+        raise  # Let it bubble up for graceful exit
     except Exception as e:
         print(f"⚠️ Error during summarizing chunk: {e}")
         return None

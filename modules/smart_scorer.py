@@ -1,9 +1,14 @@
+# smart_scorer.py
 import os
 from openai import OpenAI
 from modules.user_profile import load_user_profile
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 MODEL_SMART_SCORER = os.getenv("MODEL_SMART_SCORER", "gpt-3.5-turbo")
+
+models = client.models.list()
+
+print("✅ Models loaded:", [m.id for m in models.data[:3]])
 
 
 def smart_score(summary: str, user_id: str) -> float:
