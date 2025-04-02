@@ -1,41 +1,58 @@
-# logger.py
+# utils/logger.py
+
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
+from pathlib import Path
+
+LOG_DIR = "logs"
+PIPELINE_LOG_PATH = os.path.join(LOG_DIR, "pipeline_log.jsonl")
 
 
-def log_smart_score(
-    user_id,
-    video,
-    summary,
-    score,
-    smart_used=True,
-    matched_keywords=None,
-):
+def log_smart_score(user_id, video, score, summary):
     log_entry = {
-        "timestamp": datetime.utcnow().isoformat(),
-        "user_id": user_id,
-        "video_title": video["title"],
-        "video_url": video["url"],
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "user": user_id,
+        "video_id": video["video_id"],
+        "title": video["title"],
         "channel": video["channel"],
-        "summary": summary,
         "score": score,
-        "smart_scoring": smart_used,
+        "summary": summary,
     }
-    if matched_keywords is not None:
-        log_entry["matched_keywords"] = matched_keywords
-
-    log_path = os.path.join("users", user_id, "scoring_log.jsonl")
-    with open(log_path, "a", encoding="utf-8") as f:
+    Path(LOG_DIR).mkdir(parents=True, exist_ok=True)
+    path = os.path.join("users", user_id, "scoring_log.jsonl")
+    with open(path, "a", encoding="utf-8") as f:
         f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
 
 
-if __name__ == "__main__":
-    # Test sample usage
-    video = {
-        "title": "Why OpenAI is betting big on agents",
-        "url": "https://youtube.com/watch?v=xyz123",
-        "channel": "Fireship",
+def log_summary(video, summary, score):
+    entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "video_id": video["video_id"],
+        "title": video["title"],
+        "channel": video["channel"],
+        "url": video["url"],
+        "summary": summary,
+        "score": score,
     }
-    summary = "OpenAI just released an agent SDK that radically simplifies autonomous AI workflows."
-    log_smart_score("default", video, summary, 0.85)
+    Path(LOG_DIR).mkdir(parents=True, exist_ok=True)
+    with open("data/summary_log.jsonl", "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def log_pipeline_event(user_id, action, mode, status, items=None, cooldown_active=None):
+    entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "user": user_id,
+        "action": action,
+        "mode": mode,
+        "status": status,
+    }
+    if items is not None:
+        entry["items"] = items
+    if cooldown_active is not None:
+        entry["cooldown_active"] = cooldown_active
+
+    Path(LOG_DIR).mkdir(parents=True, exist_ok=True)
+    with open(PIPELINE_LOG_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry) + "\n")
