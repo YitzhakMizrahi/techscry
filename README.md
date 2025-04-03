@@ -1,4 +1,4 @@
-# 🧠 TechScry
+# 🔠 TechScry
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![License](https://img.shields.io/badge/License-MIT-blue)
@@ -11,9 +11,9 @@ TechScry monitors AI/tech YouTube channels, summarizes videos using OpenAI, scor
 ## 🚀 Features
 
 - 🔎 **Video Discovery**: Pulls from RSS feeds of followed and trending channels
-- 🗘 **Transcription & Summarization**: OpenAI-based LLM summaries with chunk merging
+- 🗘️ **Transcription & Summarization**: OpenAI-based LLM summaries with chunk merging
 - 📊 **Smart Scoring**: Personalized GPT scoring based on per-user interests
-- 🛅 **Curation Pool**: Per-user prioritized digest queues with timestamps
+- 🗕 **Curation Pool**: Per-user prioritized digest queues with timestamps
 - 🧠 **Summary Caching**: Avoids redundant LLM calls via summary deduplication
 - 📧 **Digest Delivery**: Styled emails with cooldown-aware delivery logic
 - 🧪 **Mocking & Previews**: Dry runs, preview flags, HTML saves for dev & testing
@@ -28,18 +28,48 @@ TechScry monitors AI/tech YouTube channels, summarizes videos using OpenAI, scor
 ```bash
 techscry/
 ├── agents/                  # Email agent (SMTP)
+│   └── email_agent.py
 ├── archive/                 # Deprecated modules
+│   └── scorer.py
 ├── config/                  # Interest profile seed
+│   └── interest_profile.json
 ├── control_plane/           # Orchestration logic
+│   └── orchestrator.py
 ├── data/                    # Shared cache (summaries)
+│   └── summary_cache.json
 ├── digests/                 # Saved email HTML output
 ├── docs/                    # Docs: DEVLOG, ROADMAP, DECISIONS
+│   ├── DEVLOG.md
+│   ├── ROADMAP.md
+│   └── DECISIONS.md
 ├── modules/                 # Core logic modules
+│   ├── transcript_fetcher.py
+│   ├── summarizer.py
+│   ├── smart_scorer.py
+│   ├── transcript_cache.py
+│   ├── user_profile.py
+│   ├── skip_cache.py
+│   └── curation_pool.py
 ├── scripts/                 # CLI entrypoints (digest, pipeline)
+│   ├── run_pipeline.py
+│   ├── send_curated_digest.py
+│   └── dev_send_digest.py
 ├── templates/               # Jinja HTML email templates
+│   ├── digest_email.html
+│   └── digest_email_safe.html
 ├── tests/mock/              # Preview/test fixtures
+│   ├── mock_digest_data.json
+│   └── mock_skipped_videos.json
 ├── users/                   # Per-user state & preferences
+│   └── <user_id>/
+│       ├── profile.json
+│       ├── seen_videos.json
+│       ├── skipped.json
+│       └── digest_queue.json
 ├── utils/                   # Utilities (logger, cooldown, chunking)
+│   ├── logger.py
+│   ├── chunking.py
+│   └── notification_gate.py
 ├── loop_runner.py           # Universal interval-based loop executor
 ├── .env.template            # Configuration template
 └── requirements.txt
@@ -112,7 +142,7 @@ python -m loop_runner --script scripts.send_curated_digest --interval 900 --args
 
 ---
 
-## 🗃️ Logs
+## 📃 Logs
 
 Logs stored in `logs/pipeline_log.jsonl` track each user's:
 
@@ -122,7 +152,7 @@ Logs stored in `logs/pipeline_log.jsonl` track each user's:
 
 ---
 
-## 🧩 Design Principles
+## 🤩 Design Principles
 
 - **Context-Aware Delivery**: Respects user preferences, follows cooldowns
 - **Minimal LLM Cost**: Caching, chunking, and relevance filtering built-in

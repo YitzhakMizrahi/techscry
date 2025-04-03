@@ -46,7 +46,7 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-## 📅 Curated Digest & Notification Gate
+## 🗓️ Curated Digest & Notification Gate
 
 **Date**: March 31, 2025
 
@@ -98,6 +98,19 @@ A chronological log of major development milestones, changes, and decisions in T
 - ✅ Introduced `--log-only` and `--save-html` for `send_curated_digest.py`
 - ✅ Created `logs/pipeline_log.jsonl` for system-wide event logging
 - ✅ .gitignore updated to exclude data, logs, digests, and user state
+
+---
+
+## 🔍 Transcript Caching Validation & Cleanup
+
+**Date**: April 3, 2025
+
+- ✅ `transcript_cache.py` created to cache transcripts under `data/transcript_cache.json`
+- ✅ `transcript_fetcher.py` patched to use cache hits before triggering fetch
+- ✅ Tested repeated runs with cleared `seen_videos` to confirm skip behavior
+- ✅ Added logging for cache hit/miss and summarization skipping
+- ✅ Verified faster runs and no redundant LLM calls
+- ✅ Removed experimental `utils/runtime.py` enforcement system (no longer needed)
 
 ---
 
