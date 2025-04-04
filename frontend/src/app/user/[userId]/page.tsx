@@ -1,15 +1,13 @@
 // src/app/user/[userId]/page.tsx
-import { notFound } from 'next/navigation';
 import { DigestPreview } from '@/components/DigestPreview';
+import { SkippedVideos } from '@/components/SkippedVideos';
 
-interface Props {
+export default function UserDigestPage({
+  params,
+}: {
   params: { userId: string };
-}
-
-export default function UserDigestPage({ params }: Props) {
+}) {
   const { userId } = params;
-
-  if (!userId) return notFound();
 
   return (
     <main className="p-6">
@@ -18,6 +16,7 @@ export default function UserDigestPage({ params }: Props) {
         <span className="text-muted-foreground">{userId}</span>
       </h1>
       <DigestPreview userId={userId} />
+      <SkippedVideos userId={userId} />
     </main>
   );
 }
