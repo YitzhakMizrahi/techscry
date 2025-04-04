@@ -1,0 +1,12 @@
+[
+  {
+    "video_id": "abc123",
+    "title": "LangChain Agents vs AutoGen: Which One Wins?",
+    "channel": "Fireship",
+    "summary": "This video compares LangChain agents to AutoGen workflows...",
+    "url": "https://www.youtube.com/watch?v=abc123",
+    "score": 0.91,
+    "added_at": "2025-04-03T12:00:00Z",
+    "notified": false
+  }
+]

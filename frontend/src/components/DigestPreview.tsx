@@ -21,26 +21,18 @@ export function DigestPreview({ userId }: Props) {
   const [items, setItems] = useState<DigestItem[]>([]);
 
   useEffect(() => {
-    // TEMP: local mock data — replace with fetch from real API or file
-    const mock: DigestItem[] = [
-      {
-        video_id: 'abc123',
-        title: 'LangChain Agents vs AutoGen: Which One Wins?',
-        channel: 'Fireship',
-        summary: 'This video compares LangChain agents to AutoGen workflows...',
-        url: 'https://youtu.be/abc123',
-        score: 0.87,
-      },
-      {
-        video_id: 'xyz456',
-        title: 'New OpenAI SDK Features in 2025',
-        channel: 'OpenAI',
-        summary: 'An overview of the newest OpenAI SDK capabilities...',
-        url: 'https://youtu.be/xyz456',
-        score: 0.78,
-      },
-    ];
-    setItems(mock);
+    const loadDigest = async () => {
+      try {
+        const res = await fetch('/mock/curation_pool.json');
+        if (!res.ok) throw new Error('Failed to fetch mock digest');
+        const data = await res.json();
+        setItems(data);
+      } catch (err) {
+        console.error('Error loading digest:', err);
+      }
+    };
+
+    loadDigest();
   }, [userId]);
 
   return (
@@ -55,6 +47,7 @@ export function DigestPreview({ userId }: Props) {
           <a
             href={item.url}
             target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-600 hover:underline text-sm"
           >
             🔗 Watch on YouTube
