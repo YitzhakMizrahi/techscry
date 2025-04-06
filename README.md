@@ -42,6 +42,7 @@ techscry/
 │   ├── DEVLOG.md
 │   ├── ROADMAP.md
 │   └── DECISIONS.md
+├── frontend/                 # 📌 New: Next.js-based feed viewer
 ├── modules/                 # Core logic modules
 │   ├── transcript_fetcher.py
 │   ├── summarizer.py
@@ -152,6 +153,30 @@ Logs stored in `logs/pipeline_log.jsonl` track each user's:
 
 ---
 
+## 🌐 Frontend App (Next.js)
+
+The `frontend/` directory contains a fully client-rendered Next.js UI for digest preview and skipped video inspection.
+
+### ⚡ Features
+
+- Digest cards with title, summary, relevance badge
+- YouTube modal player on click
+- Hover play icon for visual feedback
+- Skipped video listing
+- Responsive design (1–6 columns depending on screen size)
+
+### 🧪 Dev Setup
+
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Visit http://localhost:3000/user/default for the default user’s feed.
+
+---
+
 ## 🤩 Design Principles
 
 - **Context-Aware Delivery**: Respects user preferences, follows cooldowns
@@ -161,13 +186,14 @@ Logs stored in `logs/pipeline_log.jsonl` track each user's:
 
 ---
 
-## 🌱 Want More?
+## 📚 Docs & Planning
 
 Check the `docs/` folder for:
 
-- `DEVLOG.md` — Historical change tracking
-- `DECISIONS.md` — Design choices
-- `ROADMAP.md` — Vision and next steps
+- [docs/DEVLOG.md](../docs/DEVLOG.md) — Historical change tracking
+- [docs/DECISIONS.md](../docs/DECISIONS.md) — Design choices
+- [docs/ROADMAP.md](../docs/ROADMAP.md) — Vision and next steps
+- [docs/RISK_RADAR.md](../docs/RISK_RADAR.md) — Risks & mitigation
 
 ---
 

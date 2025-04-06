@@ -11,6 +11,7 @@ Built with [Next.js](https://nextjs.org), [Tailwind CSS](https://tailwindcss.com
 ### 1. Install dependencies
 
 ```bash
+cd frontend
 pnpm install
 # or
 npm install
@@ -27,11 +28,19 @@ Then open http://localhost:3000 in your browser.
 ## 📁 Project Structure
 
 ```bash
-src/
-  components/      → UI and functional React components
-  app/             → Route-based structure (App Router)
-  lib/             → Utilities, helpers
-  mock/            → Optional mock data (for dev/testing)
+frontend/
+├── app/                # App router layout
+│   └── user/[userId]/  # Per-user feed route
+├── components/         # Reusable UI
+│   ├── DigestPreview.tsx
+│   ├── SkippedVideos.tsx
+│   ├── UserAdminPanel.tsx
+│   └── VideoModal.tsx
+├── mock/               # Local mock data (mirrors backend state)
+├── lib/                # Utility functions
+├── styles/             # Tailwind CSS + globals
+└── shadcn/             # UI primitives via CLI (button, card, badge, etc.)
+
 
 ```
 
@@ -45,7 +54,7 @@ src/
 
   - `/admin` → Admin dashboard (user controls, digest preview trigger)
 
-  - `/user/default` → Personalized feed for user default
+  - `/user/<user_id>` → Personalized feed for user default
 
 ## 🎨 Tech & Tools
 
@@ -63,16 +72,7 @@ src/
 
 - ✅ Modal YouTube player with keyboard & mouse support
 
-## 📦 Deployment
-
-Supports hosting via Vercel, Netlify, or your preferred platform:
-
-```bash
-pnpm build
-pnpm start
-```
-
-## 📖 See Also
+## 🔗 Related
 
 - [../README.md](../README.md) — Backend + system design notes
 - [docs/ROADMAP.md](../docs/ROADMAP.md) — Development priorities
