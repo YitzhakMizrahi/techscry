@@ -3,7 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { ExternalLink } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 interface DigestItem {
   video_id: string;
@@ -37,25 +38,52 @@ export function DigestPreview({ userId }: Props) {
   }, [userId]);
 
   return (
-    <div className="grid gap-4">
-      {items.map((item) => (
-        <Card key={item.video_id} className="p-4">
-          <div className="text-lg font-semibold mb-1">{item.title}</div>
-          <div className="text-sm text-muted-foreground mb-2">
-            {item.channel}
-          </div>
-          <div className="text-sm mb-2">{item.summary}</div>
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
+    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {items.map((item) => {
+        const thumbnailUrl = `https://img.youtube.com/vi/${item.video_id}/hqdefault.jpg`;
+
+        return (
+          <Card
+            key={item.video_id}
+            className="group relative overflow-hidden rounded-lg border p-4 transition-shadow hover:shadow-md"
           >
-            <ExternalLink className="w-4 h-4" />
-            Watch on YouTube
-          </a>
-        </Card>
-      ))}
+            <div className="relative mb-4 h-40 w-full overflow-hidden rounded border">
+              <Image
+                src={thumbnailUrl}
+                alt={item.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
+              />
+              <Badge className="absolute top-2 right-2 bg-muted text-foreground text-xs">
+                {item.score >= 0.95
+                  ? '🔥 High Relevance'
+                  : `Score: ${item.score.toFixed(1)}`}
+              </Badge>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <h3 className="text-base font-semibold leading-tight line-clamp-2">
+                {item.title}
+              </h3>
+              <div className="text-sm text-muted-foreground">
+                {item.channel}
+              </div>
+              <p className="text-sm text-muted-foreground line-clamp-4">
+                {item.summary}
+              </p>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 text-sm font-medium text-primary hover:underline"
+              >
+                Watch on YouTube →
+              </a>
+            </div>
+          </Card>
+        );
+      })}
     </div>
   );
 }
