@@ -190,10 +190,10 @@ Visit http://localhost:3000/user/default for the default user’s feed.
 
 Check the `docs/` folder for:
 
-- [docs/DEVLOG.md](../docs/DEVLOG.md) — Historical change tracking
-- [docs/DECISIONS.md](../docs/DECISIONS.md) — Design choices
-- [docs/ROADMAP.md](../docs/ROADMAP.md) — Vision and next steps
-- [docs/RISK_RADAR.md](../docs/RISK_RADAR.md) — Risks & mitigation
+- [docs/DEVLOG.md](docs/DEVLOG.md) — Historical change tracking
+- [docs/DECISIONS.md](docs/DECISIONS.md) — Design choices
+- [docs/ROADMAP.md](docs/ROADMAP.md) — Vision and next steps
+- [docs/RISK_RADAR.md](docs/RISK_RADAR.md) — Risks & mitigation
 
 ---
 
