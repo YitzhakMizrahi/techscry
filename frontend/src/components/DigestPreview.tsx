@@ -19,6 +19,18 @@ interface Props {
   userId: string;
 }
 
+function getBadgeProps(score: number): {
+  label: string;
+  variant: 'default' | 'secondary' | 'destructive' | 'outline';
+} {
+  if (score >= 0.95)
+    return { label: '🔥 High Relevance', variant: 'destructive' };
+  if (score >= 0.8) return { label: 'Strong Signal', variant: 'default' };
+  if (score >= 0.6) return { label: 'Relevant', variant: 'secondary' };
+  // Formerly "outline"
+  return { label: 'Mild Signal', variant: 'secondary' };
+}
+
 export function DigestPreview({ userId }: Props) {
   const [items, setItems] = useState<DigestItem[]>([]);
 
@@ -41,6 +53,7 @@ export function DigestPreview({ userId }: Props) {
     <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => {
         const thumbnailUrl = `https://img.youtube.com/vi/${item.video_id}/hqdefault.jpg`;
+        const badge = getBadgeProps(item.score);
 
         return (
           <Card
@@ -55,10 +68,11 @@ export function DigestPreview({ userId }: Props) {
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"
               />
-              <Badge className="absolute top-2 right-2 bg-muted text-foreground text-xs">
-                {item.score >= 0.95
-                  ? '🔥 High Relevance'
-                  : `Score: ${item.score.toFixed(1)}`}
+              <Badge
+                className={`absolute top-2 right-2 text-xs italic opacity-60`}
+                variant={badge.variant}
+              >
+                {badge.label}
               </Badge>
             </div>
 
