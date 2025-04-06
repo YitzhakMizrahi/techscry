@@ -10,12 +10,18 @@ export default async function UserDigestPage({
   const { userId } = await params;
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
-        <Newspaper className="w-7 h-7 text-muted-foreground" />
-        Digest Preview for{' '}
-        <span className="text-muted-foreground">{userId}</span>
-      </h1>
+    <main className="px-6 py-10 max-w-7xl mx-auto">
+      <header className="mb-8 flex flex-col gap-1">
+        <h1 className="text-3xl font-semibold flex items-center gap-3">
+          <Newspaper className="w-7 h-7 text-muted-foreground shrink-0" />
+          <span>Your Personalized Intelligence Stream</span>
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Curated, high-signal content selected just for{' '}
+          <span className="font-medium">{userId}</span>.
+        </p>
+      </header>
+
       <DigestPreview userId={userId} />
       <SkippedVideos userId={userId} />
     </main>

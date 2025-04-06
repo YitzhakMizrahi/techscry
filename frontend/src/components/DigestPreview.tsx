@@ -51,7 +51,7 @@ export function DigestPreview({ userId }: Props) {
 
   return (
     <>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5  2xl:grid-cols-6">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => {
           const thumbnailUrl = `https://img.youtube.com/vi/${item.video_id}/hqdefault.jpg`;
           const badge = getBadgeProps(item.score);
@@ -70,7 +70,9 @@ export function DigestPreview({ userId }: Props) {
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
+                  className="object-cover group-hover:brightness-75 transition duration-200"
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." // you can use a tiny image or a blur hash here
                 />
                 <Badge
                   className={`absolute top-2 right-2 text-xs italic opacity-60`}
@@ -78,6 +80,18 @@ export function DigestPreview({ userId }: Props) {
                 >
                   {badge.label}
                 </Badge>
+                <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="bg-white/80 rounded-full p-3 backdrop-blur-sm shadow-md">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-black"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </span>
               </div>
 
               <div className="flex flex-col gap-2">
