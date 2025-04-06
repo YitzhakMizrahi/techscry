@@ -114,4 +114,18 @@ A chronological log of major development milestones, changes, and decisions in T
 
 ---
 
-To be continued...
+## 🧙 Frontend Redesign & Digest Feed Polish
+
+**Date**: April 4–6, 2025
+
+- ✅ `create-next-app` scaffolded with Tailwind, App Router, and shadcn/ui
+- ✅ Built `DigestPreview` and `SkippedVideos` components
+- ✅ Added responsive grid layout, score badges, thumbnails
+- ✅ Introduced YouTube modal playback with ESC to close
+- ✅ Used real-world sample data to test UI under load
+- ✅ Structured mock data under `/mock/`, decoupled from preview-only logic
+- ✅ UI polish: typography, spacing, transitions, hover play icon, blur effect
+- ✅ Began refactoring `UserAdminPanel` and debug tools
+- ✅ Created `RISK_RADAR.md` to clarify priorities and prevent overbuilding
+
+_To be continued..._

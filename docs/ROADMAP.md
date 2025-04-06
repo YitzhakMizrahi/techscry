@@ -4,7 +4,7 @@ A living roadmap outlining active priorities, near-term upgrades, and long-term 
 
 ---
 
-## ✅ Recently Completed (March–April 1, 2025)
+## ✅ Recently Completed (March–April 6, 2025)
 
 - 🔧 Refactored to fully support per-user state (seen/skipped/digest → curation_pool)
 - 🧠 Smart scoring with GPT using profile-aware prompt
@@ -17,6 +17,9 @@ A living roadmap outlining active priorities, near-term upgrades, and long-term 
   - Logging to `logs/pipeline_log.jsonl`
   - Time-based `loop_runner.py` for background scheduling
 - 🛠️ `.gitignore`, `.gitattributes`, and file hygiene cleanup
+- 🎨 DigestPreview frontend: responsive layout, smart score badge, YouTube thumbnail modal, mobile-friendly UI polish
+- 💬 Clear separation: backend previews for testing, frontend personalized feed for daily use
+- 📓 Introduced `RISK_RADAR.md` to guide long-term focus and avoid over-engineering
 
 ---
 
@@ -37,7 +40,7 @@ A living roadmap outlining active priorities, near-term upgrades, and long-term 
 - 📨 Create `digest_runner.py` that respects per-user cooldown timers for delivery
 - 👥 Multi-user mock data generator
 - 💬 Digest email footer with opt-out / feedback link
-- When a digest is created maybe make it create a user named directory first and the digest inside??
+- 🗂️ Store user digests in `users/<user_id>/digests/` for traceability
 
 ---
 
@@ -55,6 +58,6 @@ A living roadmap outlining active priorities, near-term upgrades, and long-term 
 
 ---
 
-_Last updated: April 1, 2025_
+_Last updated: April 6, 2025_
 
 Built with ❤️ by TechScry Labs

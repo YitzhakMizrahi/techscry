@@ -8,8 +8,9 @@ A log of important architectural and design decisions made throughout the TechSc
 
 - **Digest-first, non-intrusive**: Deliver content summaries in batches instead of flooding the user with real-time alerts.
 - **LLM-Powered Relevance**: Leverage GPT scoring to personalize video relevance for each user.
-- **No DB, JSON-first**: Stick with per-user JSON files until the system requires something more scalable.
+- **No DB, JSON-first**: Stick with per-user JSON files until the system requires something more scalable. When the time is right, experiment with Postgres/Supabase to explore full-stack workflows.
 - **Per-user State Isolation**: Each user has their own digest queue, seen videos, skipped list, and preferences.
+- **Useful-First**: Build for our own real-world needs. Generalize only after a feature proves itself useful.
 
 ---
 
@@ -82,4 +83,4 @@ A log of important architectural and design decisions made throughout the TechSc
 
 ---
 
-_Last updated: [April 1, 2025]_
+_Last updated: April 6, 2025_
