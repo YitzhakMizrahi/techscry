@@ -1,10 +1,10 @@
-// src/components/DigestPreview.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
+import { VideoModal } from './VideoModal';
 
 interface DigestItem {
   video_id: string;
@@ -27,12 +27,12 @@ function getBadgeProps(score: number): {
     return { label: '🔥 High Relevance', variant: 'destructive' };
   if (score >= 0.8) return { label: 'Strong Signal', variant: 'default' };
   if (score >= 0.6) return { label: 'Relevant', variant: 'secondary' };
-  // Formerly "outline"
   return { label: 'Mild Signal', variant: 'secondary' };
 }
 
 export function DigestPreview({ userId }: Props) {
   const [items, setItems] = useState<DigestItem[]>([]);
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDigest = async () => {
@@ -50,54 +50,66 @@ export function DigestPreview({ userId }: Props) {
   }, [userId]);
 
   return (
-    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => {
-        const thumbnailUrl = `https://img.youtube.com/vi/${item.video_id}/hqdefault.jpg`;
-        const badge = getBadgeProps(item.score);
+    <>
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5  2xl:grid-cols-6">
+        {items.map((item) => {
+          const thumbnailUrl = `https://img.youtube.com/vi/${item.video_id}/hqdefault.jpg`;
+          const badge = getBadgeProps(item.score);
 
-        return (
-          <Card
-            key={item.video_id}
-            className="group relative overflow-hidden rounded-lg border p-4 transition-shadow hover:shadow-md"
-          >
-            <div className="relative mb-4 h-40 w-full overflow-hidden rounded border">
-              <Image
-                src={thumbnailUrl}
-                alt={item.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover"
-              />
-              <Badge
-                className={`absolute top-2 right-2 text-xs italic opacity-60`}
-                variant={badge.variant}
+          return (
+            <Card
+              key={item.video_id}
+              className="group relative overflow-hidden rounded-lg border p-4 transition-shadow hover:shadow-md"
+            >
+              <div
+                className="relative mb-4 h-40 w-full cursor-pointer overflow-hidden rounded border"
+                onClick={() => setActiveVideoId(item.video_id)}
               >
-                {badge.label}
-              </Badge>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <h3 className="text-base font-semibold leading-tight line-clamp-2">
-                {item.title}
-              </h3>
-              <div className="text-sm text-muted-foreground">
-                {item.channel}
+                <Image
+                  src={thumbnailUrl}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+                <Badge
+                  className={`absolute top-2 right-2 text-xs italic opacity-60`}
+                  variant={badge.variant}
+                >
+                  {badge.label}
+                </Badge>
               </div>
-              <p className="text-sm text-muted-foreground line-clamp-4">
-                {item.summary}
-              </p>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 text-sm font-medium text-primary hover:underline"
-              >
-                Watch on YouTube →
-              </a>
-            </div>
-          </Card>
-        );
-      })}
-    </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="text-base font-semibold leading-tight line-clamp-2">
+                  {item.title}
+                </h3>
+                <div className="text-sm text-muted-foreground">
+                  {item.channel}
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-4">
+                  {item.summary}
+                </p>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 text-sm font-medium text-primary hover:underline"
+                >
+                  Watch on YouTube →
+                </a>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {activeVideoId && (
+        <VideoModal
+          videoId={activeVideoId}
+          onClose={() => setActiveVideoId(null)}
+        />
+      )}
+    </>
   );
 }
