@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { ExternalLink } from 'lucide-react';
 
 interface DigestItem {
   video_id: string;
@@ -48,9 +49,10 @@ export function DigestPreview({ userId }: Props) {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline text-sm"
+            className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
           >
-            🔗 Watch on YouTube
+            <ExternalLink className="w-4 h-4" />
+            Watch on YouTube
           </a>
         </Card>
       ))}

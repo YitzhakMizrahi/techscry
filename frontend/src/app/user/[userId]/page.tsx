@@ -1,18 +1,19 @@
-// src/app/user/[userId]/page.tsx
 import { DigestPreview } from '@/components/DigestPreview';
 import { SkippedVideos } from '@/components/SkippedVideos';
+import { Newspaper } from 'lucide-react';
 
-export default function UserDigestPage({
+export default async function UserDigestPage({
   params,
 }: {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }) {
-  const { userId } = params;
+  const { userId } = await params;
 
   return (
     <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        📰 Digest Preview for{' '}
+      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <Newspaper className="w-7 h-7 text-muted-foreground" />
+        Digest Preview for{' '}
         <span className="text-muted-foreground">{userId}</span>
       </h1>
       <DigestPreview userId={userId} />
